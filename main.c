@@ -51,7 +51,6 @@ int main() {
                 } else {
                     printf("Pacote %d transmitido com sucesso!\n", p.numeroPacote);
                     printf("\nPacote transmitido:\n");
-                    printf("ID: %d\n", p.id);
                     printf("Numero: %d\n", p.numeroPacote);
                     printf("Tamanho: %d KB\n", p.tamanhoKB);
                     printf("Tempo estimado: %.2f segundos\n", p.tempoEstimado);
@@ -65,7 +64,6 @@ int main() {
             } else {
                 p = desempilhar();
                 printf("\nPacote retransmitido com sucesso:\n");
-                printf("ID: %d\n", p.id);
                 printf("Numero: %d\n", p.numeroPacote);
                 printf("Tamanho: %d KB\n", p.tamanhoKB);
                 printf("Tempo estimado: %.2f segundos\n", p.tempoEstimado);
