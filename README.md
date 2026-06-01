@@ -132,6 +132,10 @@ As imagens abaixo foram geradas a partir da saída real do executável no termin
 
 O tempo estimado é calculado com uma taxa didática de `100 KB/s`. Assim, um pacote de `500 KB` aparece com `5000 ms` estimados. Esse valor não mede rede real; serve para tornar o campo do enunciado visível na simulação.
 
+## Onde isso aparece no dia a dia
+
+O mesmo raciocínio aparece quando alguém abre um site, usa Wi-Fi, acessa sistema acadêmico, faz pagamento online, imprime em rede ou participa de uma chamada de vídeo. A documentação `docs/aplicacoes-dia-a-dia.md` explica esses casos em linguagem prática, relacionando cada situação com DNS, ARP, roteador, fila, pilha e lista de pacotes ativos.
+
 ## Respostas teóricas
 
 ### Por que a fila representa bem a transmissão de pacotes?
@@ -172,6 +176,7 @@ A fila representa melhor o atraso, porque nela é possível observar quantos pac
 - `docs/workflow-questao-5.md`: fluxo de trabalho seguido no projeto.
 - `docs/roteiro-testes.md`: roteiro de validação local.
 - `docs/relatorio-implementacao.md`: decisões, problemas encontrados e explicação técnica.
+- `docs/aplicacoes-dia-a-dia.md`: exemplos práticos para apresentação.
 
 ## Referências
 

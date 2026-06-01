@@ -69,6 +69,19 @@ Motivo não técnico:
 
 - A apresentação fica mais próxima de uma ferramenta de laboratório: o usuário cadastra o ambiente, escolhe uma ação e vê uma tela de resultado.
 
+### Conectar a simulação com situações do cotidiano
+
+Foi adicionada uma documentação específica para mostrar onde esse fluxo aparece fora do exercício.
+
+Motivo técnico:
+
+- DNS, ARP, roteador, fila e retransmissão ficam mais fáceis de defender quando ligados a ações reais.
+- A explicação deixa de ser apenas "rede de computadores" e passa a mostrar casos observáveis.
+
+Motivo não técnico:
+
+- Pessoas que não trabalham com infraestrutura conseguem relacionar a simulação com abrir um site, usar Wi-Fi, imprimir em rede, fazer pagamento online ou participar de chamada de vídeo.
+
 ## Problemas encontrados e correções
 
 ### Problema 1 - Ambiente sem compilador C no PATH
@@ -157,6 +170,7 @@ O ambiente de rede usa uma tabela simples em memória. Essa tabela não substitu
 - Imagem da animação: `docs/assets/animacao-pdu.png`
 - Pilha LIFO: `docs/assets/execucao-pilha-lifo.txt`
 - Imagem da pilha: `docs/assets/pilha-lifo.png`
+- Aplicações no cotidiano: `docs/aplicacoes-dia-a-dia.md`
 
 ## Próximas melhorias possíveis
 
