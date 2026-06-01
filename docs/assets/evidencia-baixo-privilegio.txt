@@ -1,0 +1,16 @@
+===== Baixo privilegio e portabilidade =====
+
+Varredura no codigo C/H:
+rg -n "\b(fopen|remove|rename|system|CreateFile|RegOpen|socket|connect|bind|listen|accept|send|recv|ShellExecute)\s*\(" -g "*.c" -g "*.h"
+Resultado: sem ocorrencias.
+
+O executavel:
+- usa terminal e memoria do processo;
+- usa Sleep/usleep para animacao;
+- nao abre arquivo nem socket;
+- nao altera registro, servico ou permissao;
+- nao exige administrador para executar.
+
+Tela limpa:
+- API de console no Windows;
+- sequencia ANSI em sistemas POSIX.

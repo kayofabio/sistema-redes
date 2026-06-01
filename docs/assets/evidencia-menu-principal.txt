@@ -1,0 +1,11 @@
+===== Micro Maquina de Pacotes =====
+
+Demo pronta: Pacotes 1=500KB, 2=300KB, 3=700KB, 4=200KB
+Origem: PC-01 | Destino: app.local | Fluxo: DNS, ARP, roteador e PDU
+
+1 - Rodar demo pronta da Questao 5
+2 - Operar pacotes
+3 - Ambiente de rede
+4 - Consultas e estruturas
+0 - Sair
+Escolha:

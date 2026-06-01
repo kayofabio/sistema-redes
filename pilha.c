@@ -1,65 +1,70 @@
 #include <stdio.h>
-#include <string.h>
+
 #include "rede.h"
-#define MAX 100
 
-Pacote pilha[MAX]; // vetor que representa a pilha
-int topo = -1; // controla o topo da pilha
+static Pacote pilha[MAX_PILHA];
+static int topo = -1;
 
-// Função para empilhar (push)
-void empilhar(Pacote p) {
-    if (topo == MAX - 1) {
-        printf("Erro: Pilha cheia!\n");
-        return;
+int empilhar(Pacote p) {
+    if (esta_cheia()) {
+        printf("Pilha de erros cheia. O pacote %d nao foi registrado.\n", p.numeroPacote);
+        return 0;
     }
+
+    p.status = STATUS_ERRO;
     topo++;
     pilha[topo] = p;
-    printf("Empilhado: Pacote %d -> %d KB\n", p.numeroPacote, p.tamanhoKB);
+
+    printf("Pilha: pacote %d registrado para retransmissao.\n", p.numeroPacote);
+    return 1;
 }
 
-// Função para desempilhar (pop)
-Pacote desempilhar() {
-    if (topo == -1) {
-        printf("Erro: Pilha vazia!\n");
-        Pacote vazio = {-1};
-        return vazio;
+Pacote desempilhar(void) {
+    Pacote pacoteVazio = {-1};
+
+    if (esta_vazia()) {
+        printf("Pilha de erros vazia. Nao ha pacote para retransmitir.\n");
+        return pacoteVazio;
     }
-    Pacote valor = pilha[topo];
-    int statusPacote = 2; 
-    atualizar(valor.id, statusPacote); 
+
+    Pacote pacote = pilha[topo];
     topo--;
-    return valor;
+    pacote.status = STATUS_EM_TRANSITO;
+
+    return pacote;
 }
 
-// Função para consultar o topo (peek)
-Pacote consultar_topo() {
-    if (topo == -1) {
-        printf("Erro: Pilha vazia!\n");
-        Pacote vazio = {-1};
-        return vazio;
-    }
-    return pilha[topo];
-}
-
-// Verifica se a pilha está vazia
-int esta_vazia() {
+int esta_vazia(void) {
     return topo == -1;
 }
 
-// Verifica se a pilha está cheia
-int esta_cheia() {
-    return topo == MAX - 1;
+int esta_cheia(void) {
+    return topo == MAX_PILHA - 1;
 }
 
-// Mostrar toda a pilha (do topo até a base)
-void mostrar_pilha() {
+void mostrar_pilha(void) {
     if (esta_vazia()) {
-        printf("Pilha vazia!\n");
+        printf("Pilha de erros vazia.\n");
         return;
     }
 
-    printf("Pilha (do topo para a base):\n");
+    printf("\nPilha de erros (topo para base, ordem LIFO)\n");
+    printf("+------------+------------+------------+--------------+-------------+\n");
+    printf("| ID         | Pacote     | Tamanho KB | Tempo ms     | Status      |\n");
+    printf("+------------+------------+------------+--------------+-------------+\n");
+
     for (int i = topo; i >= 0; i--) {
-        printf("Pacote %d -> %d KB (Tempo estimado: %.2f segundos)\n", pilha[i].numeroPacote, pilha[i].tamanhoKB, pilha[i].tempoEstimado);
+        printf("| %10d | %10d | %10d | %12lld | %-11s |\n",
+               pilha[i].id,
+               pilha[i].numeroPacote,
+               pilha[i].tamanhoKB,
+               pilha[i].tempoEstimadoMs,
+               nomeStatus(pilha[i].status));
     }
+
+    printf("+------------+------------+------------+--------------+-------------+\n");
+}
+
+void limparPilha(void) {
+    topo = -1;
 }

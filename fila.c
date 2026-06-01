@@ -1,71 +1,116 @@
-//FILA***********************************************
 #include <stdio.h>
-#include <string.h>
+
 #include "rede.h"
- 
-#define MAX_SIZE 100
- 
-Pacote fila[MAX_SIZE];  
-int frente = 0;
-int tras = -1; 
-int pacotesTotal = 0;
- 
-// Verifica se a fila está vazia
-int filaLinearVazia() {
-    return frente > tras;
+
+static Pacote fila[MAX_FILA];
+static int quantidadeFila = 0;
+
+int filaLinearVazia(void) {
+    return quantidadeFila == 0;
 }
- 
-// Verifica se a fila está cheia (limite do vetor)
-int filaLinearCheia() {
-    return tras == MAX_SIZE - 1;
+
+int filaLinearCheia(void) {
+    return quantidadeFila == MAX_FILA;
 }
- 
-// Enfileirar (enqueue)
-void enfileirarLinear(Pacote pacote) {
+
+int enfileirarLinear(Pacote pacote) {
     if (filaLinearCheia()) {
-        printf("Erro: Fila linear cheia! (Limite do vetor atingido)\n");
-        return;
+        printf("Fila cheia. Nao foi possivel adicionar o pacote %d.\n", pacote.numeroPacote);
+        return 0;
     }
-    tras++; 
-    fila[tras] = pacote;
-    printf("Enfileirado: Pacote %d -> %d KB\n", pacote.numeroPacote, pacote.tamanhoKB);
-    pacotesTotal++;
-    if (pacotesTotal == 1) {
-        inserirInicio(pacote.id, "Computador", "Servidor");
-    } else {
-        inserirFinal(pacote.id, "Computador", "Servidor");
-    }
+
+    pacote.status = STATUS_AGUARDANDO;
+    fila[quantidadeFila] = pacote;
+    quantidadeFila++;
+
+    printf("Fila: pacote %d aguardando transmissao (%d KB, %lld ms estimados).\n",
+           pacote.numeroPacote,
+           pacote.tamanhoKB,
+           pacote.tempoEstimadoMs);
+
+    return 1;
 }
- 
-// Desenfileirar (dequeue)
-Pacote desenfileirarLinear() {
-    int statusPacote;
+
+int consultarPrimeiroFila(Pacote *saida) {
     if (filaLinearVazia()) {
-        printf("Erro: Fila vazia!\n");
-        Pacote vazio = {-1};
-        return vazio;
+        return 0;
     }
-    Pacote pacote = fila[frente]; 
-    frente++; // Simplesmente avança a frente
-    if (pacote.tamanhoKB >= 500) {
-        empilhar(pacote);
-        statusPacote = 3; 
-        atualizar(pacote.id, statusPacote); 
-    } else {
-        statusPacote = 2;
-        atualizar(pacote.id, statusPacote);
+
+    if (saida != NULL) {
+        *saida = fila[0];
     }
+
+    return 1;
+}
+
+Pacote desenfileirarLinear(void) {
+    Pacote pacoteVazio = {-1};
+
+    if (filaLinearVazia()) {
+        printf("Fila vazia. Nao ha pacote para transmitir.\n");
+        return pacoteVazio;
+    }
+
+    Pacote pacote = fila[0];
+    pacote.status = STATUS_EM_TRANSITO;
+
+    for (int i = 1; i < quantidadeFila; i++) {
+        fila[i - 1] = fila[i];
+    }
+
+    quantidadeFila--;
     return pacote;
 }
- 
-// Exibir a fila
-void exibirFilaLinear() {
+
+int removerPacoteDaFila(int numeroPacote, Pacote *saida) {
+    int indice = -1;
+
+    for (int i = 0; i < quantidadeFila; i++) {
+        if (fila[i].numeroPacote == numeroPacote) {
+            indice = i;
+            break;
+        }
+    }
+
+    if (indice == -1) {
+        return 0;
+    }
+
+    if (saida != NULL) {
+        *saida = fila[indice];
+    }
+
+    for (int i = indice + 1; i < quantidadeFila; i++) {
+        fila[i - 1] = fila[i];
+    }
+
+    quantidadeFila--;
+    return 1;
+}
+
+void exibirFilaLinear(void) {
     if (filaLinearVazia()) {
-        printf("Fila vazia!\n");
+        printf("Fila de transmissao vazia.\n");
         return;
     }
-    printf("Fila:\n");
-    for (int i = frente; i <= tras; i++) {
-        printf("Pacote %d -> %d KB (Tempo estimado: %.2f segundos)\n", fila[i].numeroPacote, fila[i].tamanhoKB, fila[i].tempoEstimado);
+
+    printf("\nFila de transmissao (ordem FIFO)\n");
+    printf("+------------+------------+------------+--------------+-------------+\n");
+    printf("| ID         | Pacote     | Tamanho KB | Tempo ms     | Status      |\n");
+    printf("+------------+------------+------------+--------------+-------------+\n");
+
+    for (int i = 0; i < quantidadeFila; i++) {
+        printf("| %10d | %10d | %10d | %12lld | %-11s |\n",
+               fila[i].id,
+               fila[i].numeroPacote,
+               fila[i].tamanhoKB,
+               fila[i].tempoEstimadoMs,
+               nomeStatus(fila[i].status));
     }
+
+    printf("+------------+------------+------------+--------------+-------------+\n");
+}
+
+void limparFilaLinear(void) {
+    quantidadeFila = 0;
 }

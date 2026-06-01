@@ -1,0 +1,16 @@
+===== Ferramentas de validacao =====
+
+Compilador usado:
+C:\Users\Desktop\Documents\oss-contrib\sistema-redes\build\tools\tcc-0.9.27\tcc\tcc.exe
+tcc version 0.9.27 (x86_64 Windows)
+
+Ferramentas no PATH:
+gcc: indisponivel no PATH
+clang: indisponivel no PATH
+cl: indisponivel no PATH
+cppcheck: indisponivel no PATH
+valgrind: indisponivel no PATH
+make: indisponivel no PATH
+
+Build: -Wall -Werror
+Regressao curta: scripts/validar-projeto.ps1

@@ -1,0 +1,5 @@
+build/
+.claude/
+*.o
+*.out
+*.exe

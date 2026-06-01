@@ -1,0 +1,135 @@
+===== Micro Maquina de Pacotes =====
+
+Demo pronta: Pacotes 1=500KB, 2=300KB, 3=700KB, 4=200KB
+Origem: PC-01 | Destino: app.local | Fluxo: DNS, ARP, roteador e PDU
+
+1 - Rodar demo pronta da Questao 5
+2 - Operar pacotes
+3 - Ambiente de rede
+4 - Consultas e estruturas
+0 - Sair
+Escolha:===== Operar pacotes =====
+
+1 - Adicionar pacote manualmente
+2 - Transmitir proximo pacote com animacao
+3 - Registrar pacote com erro
+4 - Retransmitir ultimo erro
+5 - Marcar entregue e remover da lista
+0 - Voltar
+Escolha:===== Adicionar pacote =====
+
++-----------------+----------+----------------+-------------------+-----------------+
+| Nome            | Tipo     | IP             | MAC               | Dominio         |
++-----------------+----------+----------------+-------------------+-----------------+
+| PC-01           | PC       | 192.168.10.10  | 02:00:00:00:10:10 | -               |
+| SWITCH-01       | Switch   | 0.0.0.0        | 02:00:00:00:00:02 | -               |
+| ROTEADOR-01     | Roteador | 192.168.10.1   | 02:00:00:00:10:01 | -               |
+| DNS-01          | DNS      | 192.168.10.53  | 02:00:00:00:10:53 | dns.local       |
+| SERVIDOR-01     | Servidor | 192.168.20.20  | 02:00:00:00:20:20 | app.local       |
++-----------------+----------+----------------+-------------------+-----------------+
+
+Use nome, IP ou dominio cadastrado. Exemplo de destino: app.local.
+
+Numero do pacote:Tamanho (KB):Origem [PC-01]:Destino [app.local]:Fila: pacote 10 aguardando transmissao (500 KB, 5000 ms estimados).
+
+Pressione Enter para continuar...===== Operar pacotes =====
+
+1 - Adicionar pacote manualmente
+2 - Transmitir proximo pacote com animacao
+3 - Registrar pacote com erro
+4 - Retransmitir ultimo erro
+5 - Marcar entregue e remover da lista
+0 - Voltar
+Escolha:===== Processamento da rede =====
+
+1. Host de origem localizado: PC-01 (192.168.10.10, 02:00:00:00:10:10).
+2. Consulta DNS: PC-01 pergunta ao DNS-01 por `app.local`; resposta: 192.168.20.20.
+3. Sub-redes diferentes: PC-01 envia para o gateway ROTEADOR-01 (192.168.10.1).
+4. ARP do proximo salto: gateway ROTEADOR-01 usa MAC 02:00:00:00:10:01.
+5. Roteador encaminha o pacote para a rede do destino SERVIDOR-01.
+
+Revise a resolucao acima. A proxima tela mostra a animacao da PDU.
+
+Pressione Enter para continuar...===== Animacao de troca de pacote =====
+
+Pacote 10 | 500 KB | 5000 ms estimados
+Origem: PC-01 (192.168.10.10)
+Destino: SERVIDOR-01 (192.168.20.20)
+
+Etapa: Aplicacao monta PDU
+
+[PC-01]----[SWITCH-01]----[ROTEADOR-01]----[SERVIDOR-01]
+  <PDU>
+===== Animacao de troca de pacote =====
+
+Pacote 10 | 500 KB | 5000 ms estimados
+Origem: PC-01 (192.168.10.10)
+Destino: SERVIDOR-01 (192.168.20.20)
+
+Etapa: Quadro sai da origem
+
+[PC-01]----[SWITCH-01]----[ROTEADOR-01]----[SERVIDOR-01]
+      ----<PDU>
+===== Animacao de troca de pacote =====
+
+Pacote 10 | 500 KB | 5000 ms estimados
+Origem: PC-01 (192.168.10.10)
+Destino: SERVIDOR-01 (192.168.20.20)
+
+Etapa: Switch consulta tabela MAC
+
+[PC-01]----[SWITCH-01]----[ROTEADOR-01]----[SERVIDOR-01]
+                   ----<PDU>
+===== Animacao de troca de pacote =====
+
+Pacote 10 | 500 KB | 5000 ms estimados
+Origem: PC-01 (192.168.10.10)
+Destino: SERVIDOR-01 (192.168.20.20)
+
+Etapa: Roteador avalia proximo salto
+
+[PC-01]----[SWITCH-01]----[ROTEADOR-01]----[SERVIDOR-01]
+                                  ----<PDU>
+===== Animacao de troca de pacote =====
+
+Pacote 10 | 500 KB | 5000 ms estimados
+Origem: PC-01 (192.168.10.10)
+Destino: SERVIDOR-01 (192.168.20.20)
+
+Etapa: Destino recebe e processa
+
+[PC-01]----[SWITCH-01]----[ROTEADOR-01]----[SERVIDOR-01]
+                                                   ----<PDU>
+===== Resultado da transmissao =====
+
+Pacote transmitido.
+
+ID: 1
+Pacote: 10
+Tamanho: 500 KB
+Tempo estimado: 5000 ms
+Origem: PC-01
+Destino: app.local
+Status: em_transito
+
+Ele permanece na lista como pacote ativo.
+
+Pressione Enter para continuar...===== Operar pacotes =====
+
+1 - Adicionar pacote manualmente
+2 - Transmitir proximo pacote com animacao
+3 - Registrar pacote com erro
+4 - Retransmitir ultimo erro
+5 - Marcar entregue e remover da lista
+0 - Voltar
+Escolha:===== Micro Maquina de Pacotes =====
+
+Demo pronta: Pacotes 1=500KB, 2=300KB, 3=700KB, 4=200KB
+Origem: PC-01 | Destino: app.local | Fluxo: DNS, ARP, roteador e PDU
+
+1 - Rodar demo pronta da Questao 5
+2 - Operar pacotes
+3 - Ambiente de rede
+4 - Consultas e estruturas
+0 - Sair
+Escolha:Encerrando simulacao.

@@ -1,0 +1,14 @@
+===== Processamento da rede =====
+
+Destino `destino-inexistente` nao encontrado por nome, IP ou dominio.
+Pilha: pacote 9 registrado para retransmissao.
+
+===== Pilha de erros =====
+
+
+Pilha de erros (topo para base, ordem LIFO)
++------------+------------+------------+--------------+-------------+
+| ID         | Pacote     | Tamanho KB | Tempo ms     | Status      |
++------------+------------+------------+--------------+-------------+
+|          1 |          9 |        100 |         1000 | erro        |
++------------+------------+------------+--------------+-------------+

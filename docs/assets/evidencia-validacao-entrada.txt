@@ -1,0 +1,5 @@
+===== Validacao de entrada =====
+
+System.Object[]
+
+Cadastro recusado. Verifique limite do ambiente ou dados duplicados.

@@ -1,47 +1,107 @@
 #ifndef REDE_H
 #define REDE_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#define TAM_TEXTO 50
+#define MAX_FILA 20
+#define MAX_PILHA 20
+#define MAX_DISPOSITIVOS 12
+#define TAM_IP 16
+#define TAM_MAC 18
+#define TAM_RELATORIO 1200
 
-/* Fila  e Pilha */
+typedef enum {
+    TIPO_PC = 1,
+    TIPO_SWITCH,
+    TIPO_ROTEADOR,
+    TIPO_SERVIDOR,
+    TIPO_DNS
+} TipoDispositivo;
+
+typedef enum {
+    STATUS_AGUARDANDO = 1,
+    STATUS_EM_TRANSITO,
+    STATUS_ENTREGUE,
+    STATUS_ERRO
+} StatusPacote;
+
+typedef enum {
+    ROTA_LOCAL = 1,
+    ROTA_VIA_ROTEADOR
+} TipoRota;
+
 typedef struct {
     int id;
     int numeroPacote;
     int tamanhoKB;
-    float tempoEstimado;
+    long long tempoEstimadoMs;
+    char origem[TAM_TEXTO];
+    char destino[TAM_TEXTO];
+    StatusPacote status;
 } Pacote;
 
-/* Lista Encadeada */
 typedef struct No {
-    int id;
-    char origem[50];
-    char destino[50];
-    int status; // 1 = em trânsito | 2 = entregue | 3 = cancelado
+    Pacote pacote;
     struct No *prox;
 } No;
 
-/* Lista */
-void inserirInicio(int id, char origem[], char destino[]);
-void inserirFinal(int id, char origem[], char destino[]);
-void buscarPacote(int id);
-void atualizar(int idPacote, int novoStatus);
-void remover(int id);
-void exibirLista();
+typedef struct {
+    char nome[TAM_TEXTO];
+    TipoDispositivo tipo;
+    char ip[TAM_IP];
+    char mac[TAM_MAC];
+    char dominio[TAM_TEXTO];
+} Dispositivo;
 
-/* Fila */
-void enfileirarLinear(Pacote pacote);
-Pacote desenfileirarLinear();
-void exibirFilaLinear();
-int filaLinearVazia();
-int filaLinearCheia();
+const char *nomeStatus(StatusPacote status);
+long long calcularTempoEstimadoMs(int tamanhoKB);
+Pacote montarPacote(int id, int numeroPacote, int tamanhoKB, const char origem[], const char destino[]);
 
-/* Pilha */
-void empilhar(Pacote p);
-Pacote desempilhar();
-void mostrar_pilha();
-int esta_vazia();
-int esta_cheia();
+void limparTela(void);
+void pausarTela(void);
+void aguardarMs(int milissegundos);
+void mostrarCabecalho(const char titulo[]);
+int lerInteiro(const char *rotulo);
+void lerTexto(const char *rotulo, char texto[], int tamanho, const char *valorPadrao);
+void resumirTexto(const char texto[], char resumo[], int tamanho);
+void animarTransmissaoPacote(Pacote pacote, const Dispositivo *origem, const Dispositivo *destino, TipoRota tipoRota);
+
+const char *nomeTipoDispositivo(TipoDispositivo tipo);
+void inicializarAmbientePadrao(void);
+int cadastrarDispositivo(const char nome[], TipoDispositivo tipo, const char ip[], const char mac[], const char dominio[]);
+void listarAmbiente(void);
+int resolverRotaPacote(const Pacote *pacote, Dispositivo *origem, Dispositivo *destino, TipoRota *tipoRota, char relatorio[], int tamanhoRelatorio);
+
+int enfileirarLinear(Pacote pacote);
+int consultarPrimeiroFila(Pacote *saida);
+Pacote desenfileirarLinear(void);
+int removerPacoteDaFila(int numeroPacote, Pacote *saida);
+void exibirFilaLinear(void);
+int filaLinearVazia(void);
+int filaLinearCheia(void);
+void limparFilaLinear(void);
+
+int empilhar(Pacote p);
+Pacote desempilhar(void);
+void mostrar_pilha(void);
+int esta_vazia(void);
+int esta_cheia(void);
+void limparPilha(void);
+
+int inserirPacoteAtivo(Pacote pacote);
+int buscarPacotePorNumero(int numeroPacote, Pacote *saida);
+int atualizarStatusPacote(int numeroPacote, StatusPacote novoStatus);
+int removerPacoteEntregue(int numeroPacote);
+void exibirLista(void);
+void limparLista(void);
+
+void cadastrarDispositivoInterativo(void);
+void adicionarPacoteManual(void);
+void transmitirProximoPacote(void);
+void registrarErroManual(void);
+void retransmitirUltimoErro(void);
+void buscarPacoteAtivo(void);
+void marcarEntregueERemover(void);
+void executarCenarioQuestao5(void);
+void executarAplicacao(void);
 
 #endif
