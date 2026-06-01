@@ -24,12 +24,12 @@ const char *nomeStatus(StatusPacote status) {
     }
 }
 
-int calcularTempoEstimadoMs(int tamanhoKB) {
+long long calcularTempoEstimadoMs(int tamanhoKB) {
     if (tamanhoKB <= 0) {
         return 0;
     }
 
-    return (tamanhoKB * 1000) / LINK_KB_POR_SEGUNDO;
+    return ((long long) tamanhoKB * 1000) / LINK_KB_POR_SEGUNDO;
 }
 
 Pacote montarPacote(int id, int numeroPacote, int tamanhoKB, const char origem[], const char destino[]) {

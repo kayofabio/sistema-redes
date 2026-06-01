@@ -1,0 +1,11 @@
+===== Processamento da rede =====
+
+1. Host de origem localizado: PC-01 (192.168.10.10, 02:00:00:00:10:10).
+2. Consulta DNS: PC-01 pergunta ao DNS-01 por `app.local`; resposta: 192.168.20.20.
+3. Sub-redes diferentes: PC-01 envia para o gateway ROTEADOR-01 (192.168.10.1).
+4. ARP do proximo salto: gateway ROTEADOR-01 usa MAC 02:00:00:00:10:01.
+5. Roteador encaminha o pacote para a rede do destino SERVIDOR-01.
+
+Revise a resolucao acima. A proxima tela mostra a animacao da PDU.
+
+Pressione Enter para continuar...

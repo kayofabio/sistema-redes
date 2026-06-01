@@ -24,11 +24,16 @@ typedef enum {
     STATUS_ERRO
 } StatusPacote;
 
+typedef enum {
+    ROTA_LOCAL = 1,
+    ROTA_VIA_ROTEADOR
+} TipoRota;
+
 typedef struct {
     int id;
     int numeroPacote;
     int tamanhoKB;
-    int tempoEstimadoMs;
+    long long tempoEstimadoMs;
     char origem[TAM_TEXTO];
     char destino[TAM_TEXTO];
     StatusPacote status;
@@ -48,7 +53,7 @@ typedef struct {
 } Dispositivo;
 
 const char *nomeStatus(StatusPacote status);
-int calcularTempoEstimadoMs(int tamanhoKB);
+long long calcularTempoEstimadoMs(int tamanhoKB);
 Pacote montarPacote(int id, int numeroPacote, int tamanhoKB, const char origem[], const char destino[]);
 
 void limparTela(void);
@@ -57,15 +62,17 @@ void aguardarMs(int milissegundos);
 void mostrarCabecalho(const char titulo[]);
 int lerInteiro(const char *rotulo);
 void lerTexto(const char *rotulo, char texto[], int tamanho, const char *valorPadrao);
-void animarTransmissaoPacote(Pacote pacote, const Dispositivo *origem, const Dispositivo *destino);
+void resumirTexto(const char texto[], char resumo[], int tamanho);
+void animarTransmissaoPacote(Pacote pacote, const Dispositivo *origem, const Dispositivo *destino, TipoRota tipoRota);
 
 const char *nomeTipoDispositivo(TipoDispositivo tipo);
 void inicializarAmbientePadrao(void);
 int cadastrarDispositivo(const char nome[], TipoDispositivo tipo, const char ip[], const char mac[], const char dominio[]);
 void listarAmbiente(void);
-int resolverRotaPacote(const Pacote *pacote, Dispositivo *origem, Dispositivo *destino, char relatorio[], int tamanhoRelatorio);
+int resolverRotaPacote(const Pacote *pacote, Dispositivo *origem, Dispositivo *destino, TipoRota *tipoRota, char relatorio[], int tamanhoRelatorio);
 
-void enfileirarLinear(Pacote pacote);
+int enfileirarLinear(Pacote pacote);
+int consultarPrimeiroFila(Pacote *saida);
 Pacote desenfileirarLinear(void);
 int removerPacoteDaFila(int numeroPacote, Pacote *saida);
 void exibirFilaLinear(void);
@@ -73,14 +80,14 @@ int filaLinearVazia(void);
 int filaLinearCheia(void);
 void limparFilaLinear(void);
 
-void empilhar(Pacote p);
+int empilhar(Pacote p);
 Pacote desempilhar(void);
 void mostrar_pilha(void);
 int esta_vazia(void);
 int esta_cheia(void);
 void limparPilha(void);
 
-void inserirPacoteAtivo(Pacote pacote);
+int inserirPacoteAtivo(Pacote pacote);
 int buscarPacotePorNumero(int numeroPacote, Pacote *saida);
 int atualizarStatusPacote(int numeroPacote, StatusPacote novoStatus);
 int removerPacoteEntregue(int numeroPacote);
@@ -95,5 +102,6 @@ void retransmitirUltimoErro(void);
 void buscarPacoteAtivo(void);
 void marcarEntregueERemover(void);
 void executarCenarioQuestao5(void);
+void executarAplicacao(void);
 
 #endif

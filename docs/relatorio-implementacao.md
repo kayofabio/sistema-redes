@@ -45,7 +45,7 @@ Essa divisão deixa claro onde cada estrutura de dados aparece e evita explicar 
 
 ### Criar um cenário guiado
 
-A opção `10` do menu executa a Questão 5 automaticamente.
+A opção `1` do menu executa a Questão 5 automaticamente, antes das opções de cadastro manual.
 
 Isso reduz erro de apresentação, porque o avaliador consegue ver:
 
@@ -54,6 +54,77 @@ Isso reduz erro de apresentação, porque o avaliador consegue ver:
 - pacote entregue removido da lista;
 - pacote com erro enviado à pilha;
 - resposta direta sobre o primeiro pacote transmitido.
+
+Após revisão de apresentação, a demo passou a pausar entre etapas importantes.
+
+Motivo técnico:
+
+- A resolução DNS/ARP era apagada pela animação antes de a pessoa conseguir explicar.
+- A pausa preserva a tela até o apresentador pressionar Enter.
+
+Motivo não técnico:
+
+- O avaliador consegue acompanhar a lógica sem depender de leitura rápida.
+
+### Reduzir poluição visual do menu
+
+O menu principal foi reorganizado em rotas principais:
+
+- demo pronta;
+- operação de pacotes;
+- ambiente de rede;
+- consultas e estruturas.
+
+Motivo técnico:
+
+- O `main.c` ficou responsável apenas pelo bootstrap.
+- O roteamento foi isolado em `menu.c`.
+- As ações continuam em `simulador.c`, preservando baixa complexidade por módulo.
+
+Motivo não técnico:
+
+- A primeira tela deixa claro o caminho principal sem expor doze opções ao mesmo tempo.
+
+### Reduzir fragilidade da interface de terminal
+
+A limpeza de tela deixou de usar `system("cls")`. No Windows, passou a usar a API de console; em sistemas POSIX, usa sequência ANSI.
+
+Motivo técnico:
+
+- Evita depender de comando externo do shell.
+- Mantém o comportamento simples e local.
+- Reduz uma prática desnecessária em código C de terminal.
+
+Motivo não técnico:
+
+- O programa continua parecendo um app de terminal, mas com menos risco de ambiente.
+
+### Validar dados antes de alterar estado
+
+Foram adicionadas validações para pacote inválido, pacote duplicado e dispositivo duplicado.
+
+Motivo técnico:
+
+- A lista encadeada usa o número do pacote para busca, atualização e remoção.
+- Dois pacotes ativos com o mesmo número criariam ambiguidade.
+- Dois dispositivos com mesmo nome, IP ou domínio prejudicariam a resolução de rota.
+
+Motivo não técnico:
+
+- Durante apresentação, erro de digitação deve virar mensagem clara, não estado quebrado.
+
+### Confirmar execução com privilégio mínimo
+
+Foi feita uma varredura no código para confirmar que o executável não usa arquivo, socket, registro do Windows, comando de shell ou API administrativa.
+
+Motivo técnico:
+
+- A simulação deve funcionar em máquina de laboratório sem privilégio elevado.
+- O programa deve depender apenas de terminal, memória do processo e temporização local.
+
+Motivo não técnico:
+
+- O professor ou qualquer integrante do grupo deve conseguir executar a demonstração em um ambiente restrito, desde que exista binário compatível ou compilador C disponível.
 
 ### Aprofundar a rede sem criar um projeto grande
 
@@ -91,7 +162,7 @@ Durante o raio-x, a máquina local não tinha `gcc`, `clang` nem `cl` disponíve
 Correção adotada:
 
 - Foi usado TinyCC portátil apenas para validação local.
-- O README documenta GCC/MinGW como caminho principal de compilação.
+- O README documenta GCC no Linux, MinGW/GCC no Windows e Clang no macOS.
 
 ### Problema 2 - Pacote com erro podia ficar duplicado no fluxo
 
@@ -132,6 +203,42 @@ Correção adotada:
 - Quando o pacote vai sair da origem, o programa mostra a resolução ARP do próximo salto.
 - Quando origem e destino estão em sub-redes diferentes, o programa usa o roteador cadastrado.
 
+### Problema 6 - A tabela de ambiente podia ficar ambígua
+
+Sem validação, seria possível cadastrar dois dispositivos com o mesmo nome, IP ou domínio.
+
+Correção adotada:
+
+- O cadastro agora recusa duplicidade por nome, IP ou domínio.
+- O relatório de rota fica mais confiável, porque cada entrada resolve para um único dispositivo.
+
+### Problema 7 - Pacotes duplicados quebravam a explicação
+
+Como busca, erro, retransmissão e remoção usam o número do pacote, duplicidade deixaria a apresentação confusa.
+
+Correção adotada:
+
+- Pacote com número já ativo é recusado.
+- Número e tamanho devem ser maiores que zero.
+
+### Problema 8 - Evidências grandes prejudicavam leitura
+
+As primeiras imagens mostravam telas longas e difíceis de ler em apresentação.
+
+Correção adotada:
+
+- Foram criados recortes focados: menu, cadastro, sobrecarga, erro de destino, estado final e validação de entrada.
+- Os transcripts continuam preservados em `docs/assets`.
+
+### Problema 9 - Termos técnicos sem glossário
+
+A documentação já citava DNS, ARP, PDU, FIFO, LIFO, compilador, Cppcheck e Valgrind, mas uma pessoa não técnica poderia se perder durante a leitura.
+
+Correção adotada:
+
+- Foi criado `docs/glossario-tecnico.md`.
+- Os termos foram separados por estruturas de dados, rede, C, build, documentação e privilégio mínimo.
+
 ## Explicação para pessoas não técnicas
 
 O programa pode ser entendido como uma fila de atendimento de pacotes:
@@ -165,16 +272,45 @@ O ambiente de rede usa uma tabela simples em memória. Essa tabela não substitu
 ## Evidências
 
 - Cenário guiado: `docs/assets/execucao-cenario-questao-5.txt`
-- Imagem do cenário: `docs/assets/cenario-questao-5.png`
 - Animação de PDU: `docs/assets/execucao-animacao-pdu.txt`
-- Imagem da animação: `docs/assets/animacao-pdu.png`
 - Pilha LIFO: `docs/assets/execucao-pilha-lifo.txt`
-- Imagem da pilha: `docs/assets/pilha-lifo.png`
+- Menu principal: `docs/assets/evidencia-menu-principal.png`
+- Cadastro de ambiente: `docs/assets/evidencia-cadastro-ambiente.png`
+- Sobrecarga da fila: `docs/assets/evidencia-sobrecarga-fila.png`
+- Erro de destino: `docs/assets/evidencia-erro-destino.png`
+- Estado final da Questão 5: `docs/assets/evidencia-demo-estado-final.png`
+- Validação de entrada: `docs/assets/evidencia-validacao-entrada.png`
+- Demo pausada: `docs/assets/evidencia-demo-pausada.png`
+- Ferramentas de validação: `docs/assets/evidencia-ferramentas-validacao.png`
+- Baixo privilégio: `docs/assets/evidencia-baixo-privilegio.png`
 - Aplicações no cotidiano: `docs/aplicacoes-dia-a-dia.md`
+- Raio-x de qualidade: `docs/raio-x-qualidade-projeto.md`
+- Portabilidade e baixo privilégio: `docs/portabilidade-baixo-privilegio.md`
+- Glossário técnico: `docs/glossario-tecnico.md`
+- Guia básico de execução: `docs/guia-basico-execucao.md`
+- Auditoria pré-PR: `docs/auditoria-pre-pr.md`
+- Gerador de evidências: `scripts/gerar-evidencias.ps1`
 
 ## Próximas melhorias possíveis
 
 - Adicionar Makefile.
-- Remover `main.exe` do versionamento em uma limpeza separada.
+- Criar modo não interativo `--demo` ou `--test` para simplificar captura de evidências.
+- Rodar Cppcheck em ambiente com a ferramenta instalada.
+- Rodar Valgrind/Memcheck em Linux com compilador C.
 - Criar uma variação opcional com PDCurses/ncurses.
-- Adicionar testes automatizados simples para as estruturas.
+- Reconciliar a branch com a `origin/main` antes do PR.
+
+## Endurecimento antes do PR
+
+Uma auditoria posterior encontrou e corrigiu falhas que não apareciam no cenário-base:
+
+- overflow no cálculo de tempo para tamanho inteiro máximo;
+- entrada textual longa contaminando o prompt seguinte;
+- IP e MAC inválidos aceitos no cadastro;
+- MAC duplicado aceito no ambiente;
+- perda de consistência quando a pilha de erros estava cheia;
+- animação de roteador exibida indevidamente em rota local;
+- retransmissão que alterava estado sem refazer a resolução de rota;
+- executável `main.exe` antigo e incompatível com o código-fonte atual.
+
+Também foram adicionados `scripts/build.ps1`, `scripts/validar-projeto.ps1` e o parecer `docs/auditoria-pre-pr.md`.

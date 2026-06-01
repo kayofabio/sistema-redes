@@ -5,12 +5,12 @@
 
 static No *inicio = NULL;
 
-void inserirPacoteAtivo(Pacote pacote) {
+int inserirPacoteAtivo(Pacote pacote) {
     No *novo = (No *) malloc(sizeof(No));
 
     if (novo == NULL) {
         printf("Erro de memoria ao inserir o pacote %d na lista.\n", pacote.numeroPacote);
-        return;
+        return 0;
     }
 
     novo->pacote = pacote;
@@ -18,7 +18,7 @@ void inserirPacoteAtivo(Pacote pacote) {
 
     if (inicio == NULL) {
         inicio = novo;
-        return;
+        return 1;
     }
 
     No *atual = inicio;
@@ -27,6 +27,7 @@ void inserirPacoteAtivo(Pacote pacote) {
     }
 
     atual->prox = novo;
+    return 1;
 }
 
 int buscarPacotePorNumero(int numeroPacote, Pacote *saida) {
@@ -98,22 +99,27 @@ void exibirLista(void) {
     }
 
     printf("\nLista encadeada de pacotes ativos\n");
-    printf("+----+---------+------------+-------------+-------------+\n");
-    printf("| ID | Pacote  | Origem     | Destino     | Status      |\n");
-    printf("+----+---------+------------+-------------+-------------+\n");
+    printf("+------------+------------+--------------------+--------------------+-------------+\n");
+    printf("| ID         | Pacote     | Origem             | Destino            | Status      |\n");
+    printf("+------------+------------+--------------------+--------------------+-------------+\n");
 
     while (atual != NULL) {
-        printf("| %2d | %7d | %-10s | %-11s | %-11s |\n",
+        char origem[19];
+        char destino[19];
+        resumirTexto(atual->pacote.origem, origem, (int) sizeof(origem));
+        resumirTexto(atual->pacote.destino, destino, (int) sizeof(destino));
+
+        printf("| %10d | %10d | %-18s | %-18s | %-11s |\n",
                atual->pacote.id,
                atual->pacote.numeroPacote,
-               atual->pacote.origem,
-               atual->pacote.destino,
+               origem,
+               destino,
                nomeStatus(atual->pacote.status));
 
         atual = atual->prox;
     }
 
-    printf("+----+---------+------------+-------------+-------------+\n");
+    printf("+------------+------------+--------------------+--------------------+-------------+\n");
 }
 
 void limparLista(void) {

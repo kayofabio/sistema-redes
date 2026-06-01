@@ -190,10 +190,12 @@ Uma forma simples de apresentar:
 
 Depois, mostrar no terminal:
 
-1. `2 - Mostrar ambiente de rede`
-2. `3 - Adicionar pacote a fila`
-3. destino `app.local`
-4. `4 - Transmitir proximo pacote com animacao`
+1. `3 - Ambiente de rede`
+2. `1 - Mostrar ambiente cadastrado`
+3. `2 - Operar pacotes`
+4. `1 - Adicionar pacote manualmente`
+5. destino `app.local`
+6. `2 - Transmitir proximo pacote com animacao`
 
 Ponto principal:
 

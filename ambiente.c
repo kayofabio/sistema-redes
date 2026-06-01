@@ -30,6 +30,14 @@ static int dominioValido(const char dominio[]) {
     return dominio[0] != '\0' && !textosIguais(dominio, "-");
 }
 
+static int campoPreenchido(const char texto[]) {
+    return texto[0] != '\0';
+}
+
+static int tipoValido(TipoDispositivo tipo) {
+    return tipo >= TIPO_PC && tipo <= TIPO_DNS;
+}
+
 static void anexarRelatorio(char relatorio[], int tamanho, const char *formato, ...) {
     int usado = (int) strlen(relatorio);
     if (usado >= tamanho - 1) {
@@ -46,19 +54,25 @@ static int buscarPorEntrada(const char entrada[], Dispositivo *saida, char modo[
     for (int i = 0; i < totalDispositivos; i++) {
         if (textosIguais(entrada, dispositivos[i].nome)) {
             *saida = dispositivos[i];
-            copiarCampo(modo, TAM_TEXTO, "nome");
+            if (modo != NULL) {
+                copiarCampo(modo, TAM_TEXTO, "nome");
+            }
             return 1;
         }
 
         if (textosIguais(entrada, dispositivos[i].ip)) {
             *saida = dispositivos[i];
-            copiarCampo(modo, TAM_TEXTO, "ip");
+            if (modo != NULL) {
+                copiarCampo(modo, TAM_TEXTO, "ip");
+            }
             return 1;
         }
 
         if (dominioValido(dispositivos[i].dominio) && textosIguais(entrada, dispositivos[i].dominio)) {
             *saida = dispositivos[i];
-            copiarCampo(modo, TAM_TEXTO, "dominio");
+            if (modo != NULL) {
+                copiarCampo(modo, TAM_TEXTO, "dominio");
+            }
             return 1;
         }
     }
@@ -77,19 +91,90 @@ static int buscarPrimeiroTipo(TipoDispositivo tipo, Dispositivo *saida) {
     return 0;
 }
 
+static int lerIpv4(const char ip[], int octetos[4]) {
+    char sobra;
+
+    if (sscanf(ip,
+               "%d.%d.%d.%d%c",
+               &octetos[0],
+               &octetos[1],
+               &octetos[2],
+               &octetos[3],
+               &sobra) != 4) {
+        return 0;
+    }
+
+    for (int i = 0; i < 4; i++) {
+        if (octetos[i] < 0 || octetos[i] > 255) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
 static int mesmaRede24(const char ipA[], const char ipB[]) {
-    int a1, a2, a3, a4;
-    int b1, b2, b3, b4;
+    int a[4];
+    int b[4];
 
-    if (sscanf(ipA, "%d.%d.%d.%d", &a1, &a2, &a3, &a4) != 4) {
+    if (!lerIpv4(ipA, a)) {
         return 0;
     }
 
-    if (sscanf(ipB, "%d.%d.%d.%d", &b1, &b2, &b3, &b4) != 4) {
+    if (!lerIpv4(ipB, b)) {
         return 0;
     }
 
-    return a1 == b1 && a2 == b2 && a3 == b3;
+    return a[0] == b[0] && a[1] == b[1] && a[2] == b[2];
+}
+
+static int macValido(const char mac[]) {
+    if (strlen(mac) != TAM_MAC - 1) {
+        return 0;
+    }
+
+    for (int i = 0; i < TAM_MAC - 1; i++) {
+        if ((i + 1) % 3 == 0) {
+            if (mac[i] != ':') {
+                return 0;
+            }
+        } else if (!isxdigit((unsigned char) mac[i])) {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+static int dominioCadastroValido(const char dominio[]) {
+    if (!dominioValido(dominio)) {
+        return textosIguais(dominio, "-");
+    }
+
+    for (int i = 0; dominio[i] != '\0'; i++) {
+        unsigned char c = (unsigned char) dominio[i];
+        if (!isalnum(c) && c != '.' && c != '-') {
+            return 0;
+        }
+    }
+
+    return 1;
+}
+
+static int dispositivoJaCadastrado(const char nome[], const char ip[], const char mac[], const char dominio[]) {
+    for (int i = 0; i < totalDispositivos; i++) {
+        if (textosIguais(dispositivos[i].nome, nome)
+            || textosIguais(dispositivos[i].ip, ip)
+            || textosIguais(dispositivos[i].mac, mac)) {
+            return 1;
+        }
+
+        if (dominioValido(dominio) && textosIguais(dispositivos[i].dominio, dominio)) {
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 const char *nomeTipoDispositivo(TipoDispositivo tipo) {
@@ -110,7 +195,21 @@ const char *nomeTipoDispositivo(TipoDispositivo tipo) {
 }
 
 int cadastrarDispositivo(const char nome[], TipoDispositivo tipo, const char ip[], const char mac[], const char dominio[]) {
+    int octetos[4];
+
     if (totalDispositivos == MAX_DISPOSITIVOS) {
+        return 0;
+    }
+
+    if (!campoPreenchido(nome)
+        || !tipoValido(tipo)
+        || !lerIpv4(ip, octetos)
+        || !macValido(mac)
+        || !dominioCadastroValido(dominio)) {
+        return 0;
+    }
+
+    if (dispositivoJaCadastrado(nome, ip, mac, dominio)) {
         return 0;
     }
 
@@ -139,41 +238,29 @@ void listarAmbiente(void) {
         return;
     }
 
-    printf("+-------------+----------+----------------+-------------------+-------------+\n");
-    printf("| Nome        | Tipo     | IP             | MAC               | Dominio     |\n");
-    printf("+-------------+----------+----------------+-------------------+-------------+\n");
+    printf("+-----------------+----------+----------------+-------------------+-----------------+\n");
+    printf("| Nome            | Tipo     | IP             | MAC               | Dominio         |\n");
+    printf("+-----------------+----------+----------------+-------------------+-----------------+\n");
 
     for (int i = 0; i < totalDispositivos; i++) {
-        printf("| %-11s | %-8s | %-14s | %-17s | %-11s |\n",
-               dispositivos[i].nome,
+        char nome[16];
+        char dominio[16];
+        resumirTexto(dispositivos[i].nome, nome, (int) sizeof(nome));
+        resumirTexto(dispositivos[i].dominio, dominio, (int) sizeof(dominio));
+
+        printf("| %-15s | %-8s | %-14s | %-17s | %-15s |\n",
+               nome,
                nomeTipoDispositivo(dispositivos[i].tipo),
                dispositivos[i].ip,
                dispositivos[i].mac,
-               dispositivos[i].dominio);
+               dominio);
     }
 
-    printf("+-------------+----------+----------------+-------------------+-------------+\n");
+    printf("+-----------------+----------+----------------+-------------------+-----------------+\n");
 }
 
-int resolverRotaPacote(const Pacote *pacote, Dispositivo *origem, Dispositivo *destino, char relatorio[], int tamanhoRelatorio) {
-    char modoOrigem[TAM_TEXTO] = "";
-    char modoDestino[TAM_TEXTO] = "";
+static void relatarResolucaoDestino(const Pacote *pacote, const Dispositivo *origem, const Dispositivo *destino, const char modoDestino[], char relatorio[], int tamanhoRelatorio) {
     Dispositivo dns;
-    Dispositivo roteador;
-
-    relatorio[0] = '\0';
-
-    if (!buscarPorEntrada(pacote->origem, origem, modoOrigem)) {
-        snprintf(relatorio, (size_t) tamanhoRelatorio, "Origem `%s` nao encontrada no ambiente.\n", pacote->origem);
-        return 0;
-    }
-
-    if (!buscarPorEntrada(pacote->destino, destino, modoDestino)) {
-        snprintf(relatorio, (size_t) tamanhoRelatorio, "Destino `%s` nao encontrado por nome, IP ou dominio.\n", pacote->destino);
-        return 0;
-    }
-
-    anexarRelatorio(relatorio, tamanhoRelatorio, "1. Host de origem localizado: %s (%s, %s).\n", origem->nome, origem->ip, origem->mac);
 
     if (textosIguais(modoDestino, "dominio")) {
         if (buscarPrimeiroTipo(TIPO_DNS, &dns)) {
@@ -196,8 +283,13 @@ int resolverRotaPacote(const Pacote *pacote, Dispositivo *origem, Dispositivo *d
                         destino->nome,
                         destino->ip);
     }
+}
+
+static int relatarEncaminhamento(const Dispositivo *origem, const Dispositivo *destino, TipoRota *tipoRota, char relatorio[], int tamanhoRelatorio) {
+    Dispositivo roteador;
 
     if (mesmaRede24(origem->ip, destino->ip)) {
+        *tipoRota = ROTA_LOCAL;
         anexarRelatorio(relatorio, tamanhoRelatorio,
                         "3. ARP local: %s resolve %s para o MAC %s.\n",
                         origem->nome,
@@ -206,7 +298,11 @@ int resolverRotaPacote(const Pacote *pacote, Dispositivo *origem, Dispositivo *d
         anexarRelatorio(relatorio, tamanhoRelatorio,
                         "4. Encaminhamento: quadro passa pelo switch ate %s.\n",
                         destino->nome);
-    } else if (buscarPrimeiroTipo(TIPO_ROTEADOR, &roteador)) {
+        return 1;
+    }
+
+    if (buscarPrimeiroTipo(TIPO_ROTEADOR, &roteador)) {
+        *tipoRota = ROTA_VIA_ROTEADOR;
         anexarRelatorio(relatorio, tamanhoRelatorio,
                         "3. Sub-redes diferentes: %s envia para o gateway %s (%s).\n",
                         origem->nome,
@@ -219,11 +315,30 @@ int resolverRotaPacote(const Pacote *pacote, Dispositivo *origem, Dispositivo *d
         anexarRelatorio(relatorio, tamanhoRelatorio,
                         "5. Roteador encaminha o pacote para a rede do destino %s.\n",
                         destino->nome);
-    } else {
-        anexarRelatorio(relatorio, tamanhoRelatorio,
-                        "3. Destino esta fora da sub-rede e nao ha roteador cadastrado.\n");
+        return 1;
+    }
+
+    anexarRelatorio(relatorio, tamanhoRelatorio,
+                    "3. Destino esta fora da sub-rede e nao ha roteador cadastrado.\n");
+    return 0;
+}
+
+int resolverRotaPacote(const Pacote *pacote, Dispositivo *origem, Dispositivo *destino, TipoRota *tipoRota, char relatorio[], int tamanhoRelatorio) {
+    char modoDestino[TAM_TEXTO] = "";
+
+    relatorio[0] = '\0';
+
+    if (!buscarPorEntrada(pacote->origem, origem, NULL)) {
+        snprintf(relatorio, (size_t) tamanhoRelatorio, "Origem `%s` nao encontrada no ambiente.\n", pacote->origem);
         return 0;
     }
 
-    return 1;
+    if (!buscarPorEntrada(pacote->destino, destino, modoDestino)) {
+        snprintf(relatorio, (size_t) tamanhoRelatorio, "Destino `%s` nao encontrado por nome, IP ou dominio.\n", pacote->destino);
+        return 0;
+    }
+
+    anexarRelatorio(relatorio, tamanhoRelatorio, "1. Host de origem localizado: %s (%s, %s).\n", origem->nome, origem->ip, origem->mac);
+    relatarResolucaoDestino(pacote, origem, destino, modoDestino, relatorio, tamanhoRelatorio);
+    return relatarEncaminhamento(origem, destino, tipoRota, relatorio, tamanhoRelatorio);
 }

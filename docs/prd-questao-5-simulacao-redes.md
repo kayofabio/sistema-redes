@@ -44,6 +44,8 @@ Perguntas teóricas que a documentação deve responder:
 - Por que a lista encadeada ajuda no controle de pacotes ativos?
 - Qual estrutura representa melhor atraso de fila?
 
+A `origin/main` recebeu posteriormente o arquivo `simulacao-e-respostas.pdf`. Esse documento contém uma regra adicional criada para teste: pacotes com `500 KB` ou mais iriam para a pilha de erros. Como essa regra não aparece no enunciado original, ela precisa de alinhamento do grupo antes de alterar o comportamento do simulador.
+
 ## 3. Referencia conceitual: Packet Tracer
 
 O objetivo não é copiar o Cisco Packet Tracer nem criar uma ferramenta gráfica completa. A referência é conceitual: o programa deve ajudar o aluno a observar o caminho do pacote e a mudança de estado em cada etapa.
@@ -94,7 +96,7 @@ Campos mínimos de `Pacote`:
 - `destino`: destino textual, por exemplo `SERVIDOR-01`.
 - `status`: `aguardando`, `em_transito`, `entregue` ou `erro`.
 
-## 5. Raio-x do repositório atual
+## 5. Raio-x da base recebida
 
 Repositório analisado: `kayofabio/sistema-redes`.
 
@@ -105,14 +107,14 @@ Arquivos atuais:
 - `fila.c`: fila linear de pacotes.
 - `pilha.c`: pilha de pacotes com erro.
 - `lista-encadeada.c`: lista de pacotes ativos.
-- `main.exe`: executável versionado no repositório.
+- `main.exe`: executável antigo que estava versionado no repositório.
 
 Estado observado em 2026-06-01:
 
 - O repositório está público, sem README e sem licença declarada.
 - Não há issues ou pull requests abertos.
 - O código já usa fila, pilha e lista encadeada, mas ainda não cobre todo o enunciado.
-- A máquina local usada no raio-x não possui `gcc`, `clang` ou `cl` no PATH; por isso a primeira validação executou o `main.exe` existente.
+- A máquina local usada no raio-x não possui `gcc`, `clang` ou `cl` no PATH; por isso a primeira validação executou o `main.exe` existente e a validação da implementação passou a usar TinyCC portátil.
 
 ## 6. Lacunas encontradas
 
@@ -139,7 +141,7 @@ Foram avaliadas bibliotecas do tipo curses, especialmente PDCurses/ncurses, porq
 Decisão para este PR:
 
 - Não adicionar dependência externa obrigatória no primeiro ciclo.
-- Implementar uma interface textual organizada com `stdio.h`, tabelas e, se necessário, ANSI simples com fallback.
+- Implementar uma interface textual organizada com `stdio.h`, tabelas, API de console no Windows e ANSI simples em sistemas POSIX.
 - Documentar PDCurses/ncurses como melhoria futura, não como requisito da atividade.
 
 Justificativa:
@@ -238,11 +240,27 @@ RNF04 - Organização de código.
 
 - Manter a separação por estrutura: fila, pilha, lista e menu.
 - Evitar concentrar toda a lógica no `main.c`.
+- Organizar a navegação em rotas principais e submenus para evitar poluição visual.
 
 RNF05 - Evidência de execução.
 
 - Incluir roteiro de teste manual.
 - Incluir screenshots ou imagens de terminal no README.
+
+RNF06 - Baixo privilégio.
+
+- O simulador deve rodar como aplicação local de terminal.
+- A execução não deve exigir administrador.
+- A simulação não deve depender de rede real, arquivo, banco de dados, serviço ou configuração do sistema.
+
+RNF07 - Vocabulário defendível.
+
+- A documentação deve incluir glossário para termos de estrutura de dados, rede, C, build e validação.
+
+RNF08 - Apresentação acompanhável.
+
+- A demo guiada deve pausar nos pontos em que a tela contém explicação de rede ou mudança de estado.
+- A pessoa apresentando deve conseguir ler DNS, ARP, rota e estado final antes de avançar.
 
 ## 10. Critérios de aceite
 
@@ -274,7 +292,7 @@ CA06 - O PR deve conter evidência de teste local.
 3. Ajustar `fila.c` para transmitir e relatar FIFO com tempo estimado.
 4. Ajustar `pilha.c` para erro e retransmissão com status textual.
 5. Ajustar `lista-encadeada.c` para busca, remoção de entregues e exibição legível.
-6. Reorganizar `main.c` com menu didático e opção de cenário guiado.
+6. Reorganizar `main.c` como bootstrap e mover a navegação para `menu.c`.
 7. Criar README do `sistema-redes`.
 8. Criar roteiro de teste em `docs/roteiro-testes.md`.
 9. Gerar evidências de execução no terminal.
@@ -307,21 +325,35 @@ Teste manual C - Lista:
 
 Teste manual D - Cenário guiado:
 
-- Rodar a opção "cenário da Questão 5".
+- Rodar a opção `1 - Rodar demo pronta da Questao 5`.
 - Conferir se a saída mostra chegada, transmissão, erro, pilha, entrega e remoção.
 
 ## 13. Evidências geradas
 
 Arquivos criados:
 
-- `docs/assets/cenario-questao-5.png`
-- `docs/assets/animacao-pdu.png`
-- `docs/assets/pilha-lifo.png`
+- `docs/assets/evidencia-menu-principal.png`
+- `docs/assets/evidencia-cadastro-ambiente.png`
+- `docs/assets/evidencia-sobrecarga-fila.png`
+- `docs/assets/evidencia-erro-destino.png`
+- `docs/assets/evidencia-demo-estado-final.png`
+- `docs/assets/evidencia-demo-pausada.png`
+- `docs/assets/evidencia-validacao-entrada.png`
+- `docs/assets/evidencia-ferramentas-validacao.png`
+- `docs/assets/evidencia-baixo-privilegio.png`
 - `docs/assets/execucao-cenario-questao-5.txt`
 - `docs/assets/execucao-animacao-pdu.txt`
 - `docs/assets/execucao-pilha-lifo.txt`
+- `docs/raio-x-qualidade-projeto.md`
+- `docs/portabilidade-baixo-privilegio.md`
+- `docs/glossario-tecnico.md`
+- `docs/guia-basico-execucao.md`
+- `docs/auditoria-pre-pr.md`
+- `scripts/build.ps1`
+- `scripts/validar-projeto.ps1`
+- `scripts/gerar-evidencias.ps1`
 
-As imagens foram renderizadas a partir da saída textual real do executável local, com separadores de tela normalizados para leitura. Os arquivos `.txt` preservam o transcript usado para gerar as evidências visuais.
+As imagens foram renderizadas a partir da saída textual local do executável, com separadores de tela normalizados para leitura. Os arquivos `.txt` preservam o transcript usado para gerar as evidências visuais. Os recortes `evidencia-*` foram adicionados para apresentação, porque imagens longas prejudicavam leitura.
 
 ## 14. Problemas já observados e decisões
 
@@ -331,11 +363,12 @@ Problema 1 - O projeto não possui README.
 
 Problema 2 - O executável `main.exe` está versionado.
 
-- Decisão: não remover no primeiro ciclo sem alinhamento com o grupo, para evitar misturar limpeza de repositório com entrega funcional. Registrar como melhoria posterior.
+- Decisão inicial: preservar até concluir o raio-x.
+- Decisão após auditoria: remover do versionamento, pois o binário executava o menu antigo e não representava mais o código-fonte atual.
 
 Problema 3 - O ambiente local não possui compilador C no PATH.
 
-- Decisão: usar o executável atual apenas para raio-x inicial e validar a implementação final em um ambiente com compilador instalado.
+- Decisão: usar o executável atual apenas para raio-x inicial, validar a implementação local com TinyCC portátil e manter GCC/MinGW documentado como caminho principal de compilação.
 
 Problema 4 - O código atual associa erro apenas a pacote maior que 500 KB.
 
@@ -344,6 +377,42 @@ Problema 4 - O código atual associa erro apenas a pacote maior que 500 KB.
 Problema 5 - A lista atual mantém pacotes entregues como status, mas o enunciado pede remover pacote entregue.
 
 - Decisão: manter atualização de status e adicionar remoção explícita de entregues para demonstrar a operação da lista.
+
+Problema 6 - O menu principal ficou poluído após a ampliação do escopo.
+
+- Decisão: mover a navegação para `menu.c` e agrupar ações em rotas principais e submenus.
+
+Problema 7 - Dados duplicados podiam criar ambiguidade na apresentação.
+
+- Decisão: recusar pacote duplicado na lista ativa e dispositivo duplicado por nome, IP ou domínio.
+
+Problema 8 - A documentação precisava registrar decisões e lacunas, não apenas instruções.
+
+- Decisão: criar `docs/raio-x-qualidade-projeto.md` com arquitetura, testes, evidências, complexidade e próximos passos.
+
+Problema 9 - A defesa precisava responder se o projeto roda em ambiente restrito.
+
+- Decisão: criar `docs/portabilidade-baixo-privilegio.md` e evidência específica de varredura por chamadas com efeito externo.
+
+Problema 10 - A documentação usava termos técnicos demais sem apoio de leitura.
+
+- Decisão: criar `docs/glossario-tecnico.md` com termos de rede, estruturas, C, build, documentação e privilégio mínimo.
+
+Problema 11 - A demo apagava informações rápido demais para apresentação.
+
+- Decisão: pausar a resolução DNS/ARP antes da animação e pausar o cenário entre etapas.
+
+Problema 12 - Uma pessoa não técnica precisava de um caminho operacional completo.
+
+- Decisão: criar `docs/guia-basico-execucao.md` com comandos, explicação de cada comando, erros comuns, ferramentas e ordem de apresentação.
+
+Problema 13 - A `origin/main` avançou durante a implementação.
+
+- Decisão: não abrir PR antes de reconciliar os quatro commits novos, preservar `simulacao-e-respostas.pdf` e repetir a bateria de regressão.
+
+Problema 14 - O PDF novo do grupo acrescenta uma regra que não está no enunciado original.
+
+- Decisão: registrar a divergência e confirmar com o grupo se a regra de erro por tamanho deve virar modo opcional, regra principal ou apenas exemplo documental.
 
 ## 15. Fora de escopo
 

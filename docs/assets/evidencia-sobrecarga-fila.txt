@@ -1,0 +1,5 @@
+===== Sobrecarga da fila =====
+
+System.Object[]
+
+Limite validado: MAX_FILA = 20.

@@ -1,40 +1,13 @@
-
---- tela limpa ---
-
---- tela limpa ---
-
---- tela limpa ---
-
---- tela limpa ---
-
---- tela limpa ---
-
---- tela limpa ---
-
---- tela limpa ---
-
---- tela limpa ---
-
---- tela limpa ---
-
---- tela limpa ---
-
---- tela limpa ---
 ===== Micro Maquina de Pacotes =====
 
-1  - Cadastrar dispositivo no ambiente
-2  - Mostrar ambiente de rede
-3  - Adicionar pacote a fila
-4  - Transmitir proximo pacote com animacao
-5  - Registrar pacote com erro
-6  - Retransmitir ultimo erro
-7  - Buscar pacote ativo
-8  - Marcar entregue e remover da lista
-9  - Mostrar fila de transmissao
-10 - Mostrar pilha de erros
-11 - Mostrar lista de pacotes ativos
-12 - Executar cenario guiado da Questao 5
-0  - Sair
+Demo pronta: Pacotes 1=500KB, 2=300KB, 3=700KB, 4=200KB
+Origem: PC-01 | Destino: app.local | Fluxo: DNS, ARP, roteador e PDU
+
+1 - Rodar demo pronta da Questao 5
+2 - Operar pacotes
+3 - Ambiente de rede
+4 - Consultas e estruturas
+0 - Sair
 Escolha:===== Cenario guiado da Questao 5 =====
 
 Ambiente usado: PC-01 envia pacotes para app.local, resolvido pelo DNS local.
@@ -45,6 +18,9 @@ Fila: pacote 2 aguardando transmissao (300 KB, 3000 ms estimados).
 Fila: pacote 3 aguardando transmissao (700 KB, 7000 ms estimados).
 Fila: pacote 4 aguardando transmissao (200 KB, 2000 ms estimados).
 
+Revise esta etapa do cenario.
+
+Pressione Enter para continuar...
 2. Primeira transmissao com resolucao DNS, ARP e animacao.
 ===== Processamento da rede =====
 
@@ -53,7 +29,10 @@ Fila: pacote 4 aguardando transmissao (200 KB, 2000 ms estimados).
 3. Sub-redes diferentes: PC-01 envia para o gateway ROTEADOR-01 (192.168.10.1).
 4. ARP do proximo salto: gateway ROTEADOR-01 usa MAC 02:00:00:00:10:01.
 5. Roteador encaminha o pacote para a rede do destino SERVIDOR-01.
-===== Animacao de troca de pacote =====
+
+Revise a resolucao acima. A proxima tela mostra a animacao da PDU.
+
+Pressione Enter para continuar...===== Animacao de troca de pacote =====
 
 Pacote 1 | 500 KB | 5000 ms estimados
 Origem: PC-01 (192.168.10.10)
@@ -105,7 +84,7 @@ Etapa: Destino recebe e processa
                                                    ----<PDU>
 ===== Resultado da transmissao =====
 
-Pacote transmitido pela fila FIFO.
+Pacote transmitido.
 
 ID: 1
 Pacote: 1
@@ -115,10 +94,13 @@ Origem: PC-01
 Destino: app.local
 Status: em_transito
 
-Ele saiu da fila e permanece na lista como pacote ativo.
+Ele permanece na lista como pacote ativo.
 
 Pacote 1 entregue e removido da lista ativa.
 
+Revise esta etapa do cenario.
+
+Pressione Enter para continuar...
 3. Segunda transmissao.
 ===== Processamento da rede =====
 
@@ -127,7 +109,10 @@ Pacote 1 entregue e removido da lista ativa.
 3. Sub-redes diferentes: PC-01 envia para o gateway ROTEADOR-01 (192.168.10.1).
 4. ARP do proximo salto: gateway ROTEADOR-01 usa MAC 02:00:00:00:10:01.
 5. Roteador encaminha o pacote para a rede do destino SERVIDOR-01.
-===== Animacao de troca de pacote =====
+
+Revise a resolucao acima. A proxima tela mostra a animacao da PDU.
+
+Pressione Enter para continuar...===== Animacao de troca de pacote =====
 
 Pacote 2 | 300 KB | 3000 ms estimados
 Origem: PC-01 (192.168.10.10)
@@ -153,13 +138,7 @@ Pacote 2 | 300 KB | 3000 ms estimados
 Origem: PC-01 (192.168.10.10)
 Destino: SERVIDOR-01 (192.168.20.20)
 
-Etapa: Switch consulta tabela
---- tela limpa ---
-
---- tela limpa ---
-
---- tela limpa ---
-MAC
+Etapa: Switch consulta tabela MAC
 
 [PC-01]----[SWITCH-01]----[ROTEADOR-01]----[SERVIDOR-01]
                    ----<PDU>
@@ -185,7 +164,7 @@ Etapa: Destino recebe e processa
                                                    ----<PDU>
 ===== Resultado da transmissao =====
 
-Pacote transmitido pela fila FIFO.
+Pacote transmitido.
 
 ID: 2
 Pacote: 2
@@ -195,56 +174,53 @@ Origem: PC-01
 Destino: app.local
 Status: em_transito
 
-Ele saiu da fila e permanece na lista como pacote ativo.
+Ele permanece na lista como pacote ativo.
 
+Revise esta etapa do cenario.
+
+Pressione Enter para continuar...
 4. Simulacao de erro no Pacote 2.
 Pilha: pacote 2 registrado para retransmissao.
 
+Revise esta etapa do cenario.
+
+Pressione Enter para continuar...
 5. Estado final da micro maquina.
 
 Fila de transmissao (ordem FIFO)
-+----+---------+---------+----------+-------------+
-| ID | Pacote  | Tamanho | Tempo ms | Status      |
-+----+---------+---------+----------+-------------+
-|  3 |       3 |   700KB |     7000 | aguardando  |
-|  4 |       4 |   200KB |     2000 | aguardando  |
-+----+---------+---------+----------+-------------+
++------------+------------+------------+--------------+-------------+
+| ID         | Pacote     | Tamanho KB | Tempo ms     | Status      |
++------------+------------+------------+--------------+-------------+
+|          3 |          3 |        700 |         7000 | aguardando  |
+|          4 |          4 |        200 |         2000 | aguardando  |
++------------+------------+------------+--------------+-------------+
 
 Pilha de erros (topo para base, ordem LIFO)
-+----+---------+---------+----------+-------------+
-| ID | Pacote  | Tamanho | Tempo ms | Status      |
-+----+---------+---------+----------+-------------+
-|  2 |       2 |   300KB |     3000 | erro        |
-+----+---------+---------+----------+-------------+
++------------+------------+------------+--------------+-------------+
+| ID         | Pacote     | Tamanho KB | Tempo ms     | Status      |
++------------+------------+------------+--------------+-------------+
+|          2 |          2 |        300 |         3000 | erro        |
++------------+------------+------------+--------------+-------------+
 
 Lista encadeada de pacotes ativos
-+----+---------+------------+-------------+-------------+
-| ID | Pacote  | Origem     | Destino     | Status      |
-+----+---------+------------+-------------+-------------+
-|  2 |       2 | PC-01      | app.local   | erro        |
-|  3 |       3 | PC-01      | app.local   | aguardando  |
-|  4 |       4 | PC-01      | app.local   | aguardando  |
-+----+---------+------------+-------------+-------------+
++------------+------------+--------------------+--------------------+-------------+
+| ID         | Pacote     | Origem             | Destino            | Status      |
++------------+------------+--------------------+--------------------+-------------+
+|          2 |          2 | PC-01              | app.local          | erro        |
+|          3 |          3 | PC-01              | app.local          | aguardando  |
+|          4 |          4 | PC-01              | app.local          | aguardando  |
++------------+------------+--------------------+--------------------+-------------+
 
 Resposta direta: o primeiro pacote transmitido e o Pacote 1, pois a fila segue FIFO.
 
-Pressione Enter para continuar...
---- tela limpa ---
+Pressione Enter para continuar...===== Micro Maquina de Pacotes =====
 
---- tela limpa ---
-===== Micro Maquina de Pacotes =====
+Demo pronta: Pacotes 1=500KB, 2=300KB, 3=700KB, 4=200KB
+Origem: PC-01 | Destino: app.local | Fluxo: DNS, ARP, roteador e PDU
 
-1  - Cadastrar dispositivo no ambiente
-2  - Mostrar ambiente de rede
-3  - Adicionar pacote a fila
-4  - Transmitir proximo pacote com animacao
-5  - Registrar pacote com erro
-6  - Retransmitir ultimo erro
-7  - Buscar pacote ativo
-8  - Marcar entregue e remover da lista
-9  - Mostrar fila de transmissao
-10 - Mostrar pilha de erros
-11 - Mostrar lista de pacotes ativos
-12 - Executar cenario guiado da Questao 5
-0  - Sair
+1 - Rodar demo pronta da Questao 5
+2 - Operar pacotes
+3 - Ambiente de rede
+4 - Consultas e estruturas
+0 - Sair
 Escolha:Encerrando simulacao.

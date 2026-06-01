@@ -8,10 +8,47 @@ static void exibirPacote(Pacote pacote) {
     printf("ID: %d\n", pacote.id);
     printf("Pacote: %d\n", pacote.numeroPacote);
     printf("Tamanho: %d KB\n", pacote.tamanhoKB);
-    printf("Tempo estimado: %d ms\n", pacote.tempoEstimadoMs);
+    printf("Tempo estimado: %lld ms\n", pacote.tempoEstimadoMs);
     printf("Origem: %s\n", pacote.origem);
     printf("Destino: %s\n", pacote.destino);
     printf("Status: %s\n", nomeStatus(pacote.status));
+}
+
+static int registrarFalhaPacote(Pacote pacote) {
+    pacote.status = STATUS_ERRO;
+
+    if (!empilhar(pacote)) {
+        return 0;
+    }
+
+    atualizarStatusPacote(pacote.numeroPacote, STATUS_ERRO);
+    return 1;
+}
+
+static int resolverPacoteParaTransmissao(Pacote pacote, Dispositivo *origem, Dispositivo *destino, TipoRota *tipoRota, char relatorio[]) {
+    mostrarCabecalho("Processamento da rede");
+
+    if (!resolverRotaPacote(&pacote, origem, destino, tipoRota, relatorio, TAM_RELATORIO)) {
+        printf("%s", relatorio);
+        return 0;
+    }
+
+    return 1;
+}
+
+static void apresentarTransmissaoResolvida(Pacote pacote, const Dispositivo *origem, const Dispositivo *destino, TipoRota tipoRota, const char relatorio[]) {
+    printf("%s", relatorio);
+    printf("\nRevise a resolucao acima. A proxima tela mostra a animacao da PDU.\n");
+    pausarTela();
+    animarTransmissaoPacote(pacote, origem, destino, tipoRota);
+    limparTela();
+    mostrarCabecalho("Resultado da transmissao");
+
+    pacote.status = STATUS_EM_TRANSITO;
+    atualizarStatusPacote(pacote.numeroPacote, STATUS_EM_TRANSITO);
+    printf("Pacote transmitido.\n\n");
+    exibirPacote(pacote);
+    printf("\nEle permanece na lista como pacote ativo.\n");
 }
 
 void cadastrarDispositivoInterativo(void) {
@@ -35,7 +72,7 @@ void cadastrarDispositivoInterativo(void) {
     lerTexto("Dominio [-]:", dominio, TAM_TEXTO, "-");
 
     if (!cadastrarDispositivo(nome, (TipoDispositivo) tipo, ip, mac, dominio)) {
-        printf("\nAmbiente cheio. Remova a ampliacao de escopo ou reinicie com menos dispositivos.\n");
+        printf("\nCadastro recusado. Verifique limite do ambiente ou dados duplicados.\n");
         return;
     }
 
@@ -58,51 +95,60 @@ void adicionarPacoteManual(void) {
 
     int numeroPacote = lerInteiro("Numero do pacote:");
     int tamanhoKB = lerInteiro("Tamanho (KB):");
+
+    if (numeroPacote <= 0 || tamanhoKB <= 0) {
+        printf("Numero e tamanho do pacote devem ser maiores que zero.\n");
+        return;
+    }
+
+    if (buscarPacotePorNumero(numeroPacote, NULL)) {
+        printf("Pacote %d ja existe na lista ativa. Use outro numero.\n", numeroPacote);
+        return;
+    }
+
     lerTexto("Origem [PC-01]:", origem, TAM_TEXTO, "PC-01");
     lerTexto("Destino [app.local]:", destino, TAM_TEXTO, "app.local");
 
     Pacote pacote = montarPacote(proximoId, numeroPacote, tamanhoKB, origem, destino);
-    proximoId++;
 
-    enfileirarLinear(pacote);
-    inserirPacoteAtivo(pacote);
+    if (!enfileirarLinear(pacote)) {
+        return;
+    }
+
+    if (!inserirPacoteAtivo(pacote)) {
+        removerPacoteDaFila(numeroPacote, NULL);
+        printf("Cadastro desfeito para manter fila e lista consistentes.\n");
+        return;
+    }
+
+    proximoId++;
 }
 
 void transmitirProximoPacote(void) {
-    if (filaLinearVazia()) {
+    Pacote pacote;
+
+    if (!consultarPrimeiroFila(&pacote)) {
         printf("Fila vazia. Nao ha pacote aguardando transmissao.\n");
         return;
     }
 
     Dispositivo origem;
     Dispositivo destino;
+    TipoRota tipoRota;
     char relatorio[TAM_RELATORIO];
-    Pacote pacote = desenfileirarLinear();
 
-    if (pacote.id == -1) {
+    if (!resolverPacoteParaTransmissao(pacote, &origem, &destino, &tipoRota, relatorio)) {
+        if (!registrarFalhaPacote(pacote)) {
+            printf("Pacote %d permaneceu na fila para evitar perda de estado.\n", pacote.numeroPacote);
+            return;
+        }
+
+        desenfileirarLinear();
         return;
     }
 
-    mostrarCabecalho("Processamento da rede");
-
-    if (!resolverRotaPacote(&pacote, &origem, &destino, relatorio, TAM_RELATORIO)) {
-        printf("%s", relatorio);
-        pacote.status = STATUS_ERRO;
-        atualizarStatusPacote(pacote.numeroPacote, STATUS_ERRO);
-        empilhar(pacote);
-        return;
-    }
-
-    printf("%s", relatorio);
-    aguardarMs(1600);
-    animarTransmissaoPacote(pacote, &origem, &destino);
-    limparTela();
-    mostrarCabecalho("Resultado da transmissao");
-
-    atualizarStatusPacote(pacote.numeroPacote, STATUS_EM_TRANSITO);
-    printf("Pacote transmitido pela fila FIFO.\n\n");
-    exibirPacote(pacote);
-    printf("\nEle saiu da fila e permanece na lista como pacote ativo.\n");
+    desenfileirarLinear();
+    apresentarTransmissaoResolvida(pacote, &origem, &destino, tipoRota, relatorio);
 }
 
 void registrarErroManual(void) {
@@ -121,10 +167,12 @@ void registrarErroManual(void) {
         return;
     }
 
-    pacote.status = STATUS_ERRO;
+    if (!registrarFalhaPacote(pacote)) {
+        printf("Pacote %d permaneceu no estado atual para evitar perda de estado.\n", numeroPacote);
+        return;
+    }
+
     removerPacoteDaFila(numeroPacote, NULL);
-    atualizarStatusPacote(numeroPacote, STATUS_ERRO);
-    empilhar(pacote);
 }
 
 void retransmitirUltimoErro(void) {
@@ -138,10 +186,20 @@ void retransmitirUltimoErro(void) {
         return;
     }
 
-    atualizarStatusPacote(pacote.numeroPacote, STATUS_EM_TRANSITO);
+    Dispositivo origem;
+    Dispositivo destino;
+    TipoRota tipoRota;
+    char relatorio[TAM_RELATORIO];
+
     mostrarCabecalho("Retransmissao LIFO");
-    printf("Pacote retransmitido pela pilha LIFO.\n\n");
-    exibirPacote(pacote);
+    printf("Pacote %d retirado do topo da pilha para nova tentativa.\n\n", pacote.numeroPacote);
+
+    if (!resolverPacoteParaTransmissao(pacote, &origem, &destino, &tipoRota, relatorio)) {
+        registrarFalhaPacote(pacote);
+        return;
+    }
+
+    apresentarTransmissaoResolvida(pacote, &origem, &destino, tipoRota, relatorio);
 }
 
 void buscarPacoteAtivo(void) {
@@ -180,9 +238,23 @@ void marcarEntregueERemover(void) {
 
 static void adicionarPacoteCenario(int numeroPacote, int tamanhoKB) {
     Pacote pacote = montarPacote(proximoId, numeroPacote, tamanhoKB, "PC-01", "app.local");
+
+    if (!enfileirarLinear(pacote)) {
+        return;
+    }
+
+    if (!inserirPacoteAtivo(pacote)) {
+        removerPacoteDaFila(numeroPacote, NULL);
+        printf("Cadastro desfeito para manter fila e lista consistentes.\n");
+        return;
+    }
+
     proximoId++;
-    enfileirarLinear(pacote);
-    inserirPacoteAtivo(pacote);
+}
+
+static void pausarEtapaCenario(void) {
+    printf("\nRevise esta etapa do cenario.\n");
+    pausarTela();
 }
 
 void executarCenarioQuestao5(void) {
@@ -199,6 +271,7 @@ void executarCenarioQuestao5(void) {
     adicionarPacoteCenario(2, 300);
     adicionarPacoteCenario(3, 700);
     adicionarPacoteCenario(4, 200);
+    pausarEtapaCenario();
 
     printf("\n2. Primeira transmissao com resolucao DNS, ARP e animacao.\n");
     transmitirProximoPacote();
@@ -207,17 +280,18 @@ void executarCenarioQuestao5(void) {
     if (removerPacoteEntregue(1) == 1) {
         printf("\nPacote 1 entregue e removido da lista ativa.\n");
     }
+    pausarEtapaCenario();
 
     printf("\n3. Segunda transmissao.\n");
     transmitirProximoPacote();
+    pausarEtapaCenario();
 
     printf("\n4. Simulacao de erro no Pacote 2.\n");
     Pacote pacoteErro;
     if (buscarPacotePorNumero(2, &pacoteErro)) {
-        pacoteErro.status = STATUS_ERRO;
-        atualizarStatusPacote(2, STATUS_ERRO);
-        empilhar(pacoteErro);
+        registrarFalhaPacote(pacoteErro);
     }
+    pausarEtapaCenario();
 
     printf("\n5. Estado final da micro maquina.\n");
     exibirFilaLinear();

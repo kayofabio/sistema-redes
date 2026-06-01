@@ -13,20 +13,34 @@ int filaLinearCheia(void) {
     return quantidadeFila == MAX_FILA;
 }
 
-void enfileirarLinear(Pacote pacote) {
+int enfileirarLinear(Pacote pacote) {
     if (filaLinearCheia()) {
         printf("Fila cheia. Nao foi possivel adicionar o pacote %d.\n", pacote.numeroPacote);
-        return;
+        return 0;
     }
 
     pacote.status = STATUS_AGUARDANDO;
     fila[quantidadeFila] = pacote;
     quantidadeFila++;
 
-    printf("Fila: pacote %d aguardando transmissao (%d KB, %d ms estimados).\n",
+    printf("Fila: pacote %d aguardando transmissao (%d KB, %lld ms estimados).\n",
            pacote.numeroPacote,
            pacote.tamanhoKB,
            pacote.tempoEstimadoMs);
+
+    return 1;
+}
+
+int consultarPrimeiroFila(Pacote *saida) {
+    if (filaLinearVazia()) {
+        return 0;
+    }
+
+    if (saida != NULL) {
+        *saida = fila[0];
+    }
+
+    return 1;
 }
 
 Pacote desenfileirarLinear(void) {
@@ -81,12 +95,12 @@ void exibirFilaLinear(void) {
     }
 
     printf("\nFila de transmissao (ordem FIFO)\n");
-    printf("+----+---------+---------+----------+-------------+\n");
-    printf("| ID | Pacote  | Tamanho | Tempo ms | Status      |\n");
-    printf("+----+---------+---------+----------+-------------+\n");
+    printf("+------------+------------+------------+--------------+-------------+\n");
+    printf("| ID         | Pacote     | Tamanho KB | Tempo ms     | Status      |\n");
+    printf("+------------+------------+------------+--------------+-------------+\n");
 
     for (int i = 0; i < quantidadeFila; i++) {
-        printf("| %2d | %7d | %5dKB | %8d | %-11s |\n",
+        printf("| %10d | %10d | %10d | %12lld | %-11s |\n",
                fila[i].id,
                fila[i].numeroPacote,
                fila[i].tamanhoKB,
@@ -94,7 +108,7 @@ void exibirFilaLinear(void) {
                nomeStatus(fila[i].status));
     }
 
-    printf("+----+---------+---------+----------+-------------+\n");
+    printf("+------------+------------+------------+--------------+-------------+\n");
 }
 
 void limparFilaLinear(void) {

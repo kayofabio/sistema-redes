@@ -5,10 +5,10 @@
 static Pacote pilha[MAX_PILHA];
 static int topo = -1;
 
-void empilhar(Pacote p) {
+int empilhar(Pacote p) {
     if (esta_cheia()) {
         printf("Pilha de erros cheia. O pacote %d nao foi registrado.\n", p.numeroPacote);
-        return;
+        return 0;
     }
 
     p.status = STATUS_ERRO;
@@ -16,6 +16,7 @@ void empilhar(Pacote p) {
     pilha[topo] = p;
 
     printf("Pilha: pacote %d registrado para retransmissao.\n", p.numeroPacote);
+    return 1;
 }
 
 Pacote desempilhar(void) {
@@ -48,12 +49,12 @@ void mostrar_pilha(void) {
     }
 
     printf("\nPilha de erros (topo para base, ordem LIFO)\n");
-    printf("+----+---------+---------+----------+-------------+\n");
-    printf("| ID | Pacote  | Tamanho | Tempo ms | Status      |\n");
-    printf("+----+---------+---------+----------+-------------+\n");
+    printf("+------------+------------+------------+--------------+-------------+\n");
+    printf("| ID         | Pacote     | Tamanho KB | Tempo ms     | Status      |\n");
+    printf("+------------+------------+------------+--------------+-------------+\n");
 
     for (int i = topo; i >= 0; i--) {
-        printf("| %2d | %7d | %5dKB | %8d | %-11s |\n",
+        printf("| %10d | %10d | %10d | %12lld | %-11s |\n",
                pilha[i].id,
                pilha[i].numeroPacote,
                pilha[i].tamanhoKB,
@@ -61,7 +62,7 @@ void mostrar_pilha(void) {
                nomeStatus(pilha[i].status));
     }
 
-    printf("+----+---------+---------+----------+-------------+\n");
+    printf("+------------+------------+------------+--------------+-------------+\n");
 }
 
 void limparPilha(void) {
