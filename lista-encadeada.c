@@ -1,42 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
 #include "rede.h"
 
-// Ponteiro para início da lista
-struct No *inicio = NULL;
+static No *inicio = NULL;
 
-// Inserir no início
-void inserirInicio(int id, char origem[], char destino[]) {
-    struct No *novo = (struct No*) malloc(sizeof(struct No));
+void inserirPacoteAtivo(Pacote pacote) {
+    No *novo = (No *) malloc(sizeof(No));
 
     if (novo == NULL) {
-        printf("Erro de memoria!\n");
+        printf("Erro de memoria ao inserir o pacote %d na lista.\n", pacote.numeroPacote);
         return;
     }
 
-    novo->id = id;
-    strcpy(novo->origem, origem);
-    strcpy(novo->destino, destino);
-    novo->status = 1; // Status inicial: em trânsito
-    novo->prox = inicio;
-    inicio = novo;
-}
-
-// Inserir no final
-void inserirFinal(int id, char origem[], char destino[]) {
-    struct No *novo = (struct No*) malloc(sizeof(struct No));
-    struct No *atual;
-
-    if (novo == NULL) {
-        printf("Erro de memoria!\n");
-        return;
-    }
-
-    novo->id = id;
-    strcpy(novo->origem, origem);
-    strcpy(novo->destino, destino);
-    novo->status = 1; // Status inicial: em trânsito
+    novo->pacote = pacote;
     novo->prox = NULL;
 
     if (inicio == NULL) {
@@ -44,8 +21,7 @@ void inserirFinal(int id, char origem[], char destino[]) {
         return;
     }
 
-    atual = inicio;
-
+    No *atual = inicio;
     while (atual->prox != NULL) {
         atual = atual->prox;
     }
@@ -53,24 +29,54 @@ void inserirFinal(int id, char origem[], char destino[]) {
     atual->prox = novo;
 }
 
-// Remover elemento
-void remover(int id) {
-    struct No *atual = inicio;
-    struct No *anterior = NULL;
+int buscarPacotePorNumero(int numeroPacote, Pacote *saida) {
+    No *atual = inicio;
 
-    if (inicio == NULL) {
-        printf("Lista vazia!\n");
-        return;
+    while (atual != NULL) {
+        if (atual->pacote.numeroPacote == numeroPacote) {
+            if (saida != NULL) {
+                *saida = atual->pacote;
+            }
+
+            return 1;
+        }
+
+        atual = atual->prox;
     }
 
-    while (atual != NULL && atual->id != id) {
+    return 0;
+}
+
+int atualizarStatusPacote(int numeroPacote, StatusPacote novoStatus) {
+    No *atual = inicio;
+
+    while (atual != NULL) {
+        if (atual->pacote.numeroPacote == numeroPacote) {
+            atual->pacote.status = novoStatus;
+            return 1;
+        }
+
+        atual = atual->prox;
+    }
+
+    return 0;
+}
+
+int removerPacoteEntregue(int numeroPacote) {
+    No *atual = inicio;
+    No *anterior = NULL;
+
+    while (atual != NULL && atual->pacote.numeroPacote != numeroPacote) {
         anterior = atual;
         atual = atual->prox;
     }
 
     if (atual == NULL) {
-        printf("Elemento nao encontrado!\n");
-        return;
+        return 0;
+    }
+
+    if (atual->pacote.status != STATUS_ENTREGUE) {
+        return -1;
     }
 
     if (anterior == NULL) {
@@ -80,65 +86,44 @@ void remover(int id) {
     }
 
     free(atual);
+    return 1;
 }
 
-void buscarPacote(int id) {
-
-    struct No *atual = inicio;
-
-    while (atual != NULL) {
-
-        if (atual->id == id) {
-
-            printf("\nPacote encontrado:\n");
-            printf("ID: %d\n", atual->id);
-            printf("Origem: %s\n", atual->origem);
-            printf("Destino: %s\n", atual->destino);
-            printf("Status: %d\n", atual->status);
-
-            return;
-        }
-
-        atual = atual->prox;
-    }
-
-    printf("Pacote nao encontrado!\n");
-}
-
-void atualizar(int idPacote, int novoStatus) {
-    struct No *atual = inicio;
-
-    while (atual != NULL) {
-        if (atual->id == idPacote) {
-            atual->status = novoStatus;
-            return;
-        }
-
-        atual = atual->prox;
-    }
-
-    printf("Pacote nao encontrado!\n");
-}
-
-// Exibir lista
-void exibirLista() {
-    struct No *atual = inicio;
+void exibirLista(void) {
+    No *atual = inicio;
 
     if (inicio == NULL) {
-        printf("Lista vazia!\n");
+        printf("Lista de pacotes ativos vazia.\n");
         return;
     }
 
-    printf("Lista:\n");
-    printf("Status: 1 - Em transito | 2 - Entregue | 3 - Cancelado\n");
+    printf("\nLista encadeada de pacotes ativos\n");
+    printf("+----+---------+------------+-------------+-------------+\n");
+    printf("| ID | Pacote  | Origem     | Destino     | Status      |\n");
+    printf("+----+---------+------------+-------------+-------------+\n");
 
     while (atual != NULL) {
-        printf("ID: %d\n", atual->id);
-        printf("Origem: %s\n", atual->origem);
-        printf("Destino: %s\n", atual->destino);
-        printf("Status: %d\n\n", atual->status);
+        printf("| %2d | %7d | %-10s | %-11s | %-11s |\n",
+               atual->pacote.id,
+               atual->pacote.numeroPacote,
+               atual->pacote.origem,
+               atual->pacote.destino,
+               nomeStatus(atual->pacote.status));
+
         atual = atual->prox;
     }
 
-    printf("NULL\n");
+    printf("+----+---------+------------+-------------+-------------+\n");
+}
+
+void limparLista(void) {
+    No *atual = inicio;
+
+    while (atual != NULL) {
+        No *proximo = atual->prox;
+        free(atual);
+        atual = proximo;
+    }
+
+    inicio = NULL;
 }

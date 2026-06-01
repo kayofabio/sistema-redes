@@ -1,0 +1,92 @@
+
+===== MICRO MAQUINA DE PACOTES =====
+1  - Adicionar pacote a fila
+2  - Transmitir proximo pacote
+3  - Registrar pacote com erro
+4  - Retransmitir ultimo erro
+5  - Buscar pacote ativo
+6  - Marcar entregue e remover da lista
+7  - Mostrar fila de transmissao
+8  - Mostrar pilha de erros
+9  - Mostrar lista de pacotes ativos
+10 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:
+Cenario guiado da Questao 5
+Reiniciando fila, pilha e lista para uma execucao limpa.
+
+1. Chegada dos quatro pacotes do enunciado.
+Fila: pacote 1 aguardando transmissao (500 KB, 5000 ms estimados).
+Fila: pacote 2 aguardando transmissao (300 KB, 3000 ms estimados).
+Fila: pacote 3 aguardando transmissao (700 KB, 7000 ms estimados).
+Fila: pacote 4 aguardando transmissao (200 KB, 2000 ms estimados).
+
+Fila de transmissao (ordem FIFO)
++----+---------+---------+----------+-------------+
+| ID | Pacote  | Tamanho | Tempo ms | Status      |
++----+---------+---------+----------+-------------+
+|  1 |       1 |   500KB |     5000 | aguardando  |
+|  2 |       2 |   300KB |     3000 | aguardando  |
+|  3 |       3 |   700KB |     7000 | aguardando  |
+|  4 |       4 |   200KB |     2000 | aguardando  |
++----+---------+---------+----------+-------------+
+
+Lista encadeada de pacotes ativos
++----+---------+------------+-------------+-------------+
+| ID | Pacote  | Origem     | Destino     | Status      |
++----+---------+------------+-------------+-------------+
+|  1 |       1 | PC-01      | SERVIDOR-01 | aguardando  |
+|  2 |       2 | PC-01      | SERVIDOR-01 | aguardando  |
+|  3 |       3 | PC-01      | SERVIDOR-01 | aguardando  |
+|  4 |       4 | PC-01      | SERVIDOR-01 | aguardando  |
++----+---------+------------+-------------+-------------+
+
+2. Transmissao de dois pacotes pela fila.
+Primeiro transmitido: Pacote 1.
+Pacote 1 entregue e removido da lista ativa.
+Segundo transmitido: Pacote 2.
+
+3. Um pacote apresenta erro e vai para a pilha.
+Pilha: pacote 2 registrado para retransmissao.
+
+4. Estado final da micro maquina.
+
+Fila de transmissao (ordem FIFO)
++----+---------+---------+----------+-------------+
+| ID | Pacote  | Tamanho | Tempo ms | Status      |
++----+---------+---------+----------+-------------+
+|  3 |       3 |   700KB |     7000 | aguardando  |
+|  4 |       4 |   200KB |     2000 | aguardando  |
++----+---------+---------+----------+-------------+
+
+Pilha de erros (topo para base, ordem LIFO)
++----+---------+---------+----------+-------------+
+| ID | Pacote  | Tamanho | Tempo ms | Status      |
++----+---------+---------+----------+-------------+
+|  2 |       2 |   300KB |     3000 | erro        |
++----+---------+---------+----------+-------------+
+
+Lista encadeada de pacotes ativos
++----+---------+------------+-------------+-------------+
+| ID | Pacote  | Origem     | Destino     | Status      |
++----+---------+------------+-------------+-------------+
+|  2 |       2 | PC-01      | SERVIDOR-01 | erro        |
+|  3 |       3 | PC-01      | SERVIDOR-01 | aguardando  |
+|  4 |       4 | PC-01      | SERVIDOR-01 | aguardando  |
++----+---------+------------+-------------+-------------+
+
+Resposta direta: o primeiro pacote transmitido e o Pacote 1, pois a fila segue FIFO.
+
+===== MICRO MAQUINA DE PACOTES =====
+1  - Adicionar pacote a fila
+2  - Transmitir proximo pacote
+3  - Registrar pacote com erro
+4  - Retransmitir ultimo erro
+5  - Buscar pacote ativo
+6  - Marcar entregue e remover da lista
+7  - Mostrar fila de transmissao
+8  - Mostrar pilha de erros
+9  - Mostrar lista de pacotes ativos
+10 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:Encerrando simulacao.

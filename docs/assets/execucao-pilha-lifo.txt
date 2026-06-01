@@ -1,0 +1,134 @@
+
+===== MICRO MAQUINA DE PACOTES =====
+1  - Adicionar pacote a fila
+2  - Transmitir proximo pacote
+3  - Registrar pacote com erro
+4  - Retransmitir ultimo erro
+5  - Buscar pacote ativo
+6  - Marcar entregue e remover da lista
+7  - Mostrar fila de transmissao
+8  - Mostrar pilha de erros
+9  - Mostrar lista de pacotes ativos
+10 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:Numero do pacote: Tamanho (KB): Origem [PC-01]: Destino [SERVIDOR-01]: Fila: pacote 2 aguardando transmissao (300 KB, 3000 ms estimados).
+
+===== MICRO MAQUINA DE PACOTES =====
+1  - Adicionar pacote a fila
+2  - Transmitir proximo pacote
+3  - Registrar pacote com erro
+4  - Retransmitir ultimo erro
+5  - Buscar pacote ativo
+6  - Marcar entregue e remover da lista
+7  - Mostrar fila de transmissao
+8  - Mostrar pilha de erros
+9  - Mostrar lista de pacotes ativos
+10 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:Numero do pacote: Tamanho (KB): Origem [PC-01]: Destino [SERVIDOR-01]: Fila: pacote 4 aguardando transmissao (200 KB, 2000 ms estimados).
+
+===== MICRO MAQUINA DE PACOTES =====
+1  - Adicionar pacote a fila
+2  - Transmitir proximo pacote
+3  - Registrar pacote com erro
+4  - Retransmitir ultimo erro
+5  - Buscar pacote ativo
+6  - Marcar entregue e remover da lista
+7  - Mostrar fila de transmissao
+8  - Mostrar pilha de erros
+9  - Mostrar lista de pacotes ativos
+10 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:Numero do pacote com erro: Pilha: pacote 2 registrado para retransmissao.
+
+===== MICRO MAQUINA DE PACOTES =====
+1  - Adicionar pacote a fila
+2  - Transmitir proximo pacote
+3  - Registrar pacote com erro
+4  - Retransmitir ultimo erro
+5  - Buscar pacote ativo
+6  - Marcar entregue e remover da lista
+7  - Mostrar fila de transmissao
+8  - Mostrar pilha de erros
+9  - Mostrar lista de pacotes ativos
+10 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:Numero do pacote com erro: Pilha: pacote 4 registrado para retransmissao.
+
+===== MICRO MAQUINA DE PACOTES =====
+1  - Adicionar pacote a fila
+2  - Transmitir proximo pacote
+3  - Registrar pacote com erro
+4  - Retransmitir ultimo erro
+5  - Buscar pacote ativo
+6  - Marcar entregue e remover da lista
+7  - Mostrar fila de transmissao
+8  - Mostrar pilha de erros
+9  - Mostrar lista de pacotes ativos
+10 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:
+Pilha de erros (topo para base, ordem LIFO)
++----+---------+---------+----------+-------------+
+| ID | Pacote  | Tamanho | Tempo ms | Status      |
++----+---------+---------+----------+-------------+
+|  2 |       4 |   200KB |     2000 | erro        |
+|  1 |       2 |   300KB |     3000 | erro        |
++----+---------+---------+----------+-------------+
+
+===== MICRO MAQUINA DE PACOTES =====
+1  - Adicionar pacote a fila
+2  - Transmitir proximo pacote
+3  - Registrar pacote com erro
+4  - Retransmitir ultimo erro
+5  - Buscar pacote ativo
+6  - Marcar entregue e remover da lista
+7  - Mostrar fila de transmissao
+8  - Mostrar pilha de erros
+9  - Mostrar lista de pacotes ativos
+10 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:
+Pacote retransmitido pela pilha LIFO:
+ID: 2
+Pacote: 4
+Tamanho: 200 KB
+Tempo estimado: 2000 ms
+Origem: PC-01
+Destino: SERVIDOR-01
+Status: em_transito
+
+===== MICRO MAQUINA DE PACOTES =====
+1  - Adicionar pacote a fila
+2  - Transmitir proximo pacote
+3  - Registrar pacote com erro
+4  - Retransmitir ultimo erro
+5  - Buscar pacote ativo
+6  - Marcar entregue e remover da lista
+7  - Mostrar fila de transmissao
+8  - Mostrar pilha de erros
+9  - Mostrar lista de pacotes ativos
+10 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:
+Lista encadeada de pacotes ativos
++----+---------+------------+-------------+-------------+
+| ID | Pacote  | Origem     | Destino     | Status      |
++----+---------+------------+-------------+-------------+
+|  1 |       2 | PC-01      | SERVIDOR-01 | erro        |
+|  2 |       4 | PC-01      | SERVIDOR-01 | em_transito |
++----+---------+------------+-------------+-------------+
+
+===== MICRO MAQUINA DE PACOTES =====
+1  - Adicionar pacote a fila
+2  - Transmitir proximo pacote
+3  - Registrar pacote com erro
+4  - Retransmitir ultimo erro
+5  - Buscar pacote ativo
+6  - Marcar entregue e remover da lista
+7  - Mostrar fila de transmissao
+8  - Mostrar pilha de erros
+9  - Mostrar lista de pacotes ativos
+10 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:Encerrando simulacao.

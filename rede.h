@@ -1,46 +1,56 @@
 #ifndef REDE_H
 #define REDE_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#define TAM_TEXTO 50
+#define MAX_FILA 20
+#define MAX_PILHA 20
 
-/* Fila  e Pilha */
+typedef enum {
+    STATUS_AGUARDANDO = 1,
+    STATUS_EM_TRANSITO,
+    STATUS_ENTREGUE,
+    STATUS_ERRO
+} StatusPacote;
+
 typedef struct {
     int id;
     int numeroPacote;
     int tamanhoKB;
+    int tempoEstimadoMs;
+    char origem[TAM_TEXTO];
+    char destino[TAM_TEXTO];
+    StatusPacote status;
 } Pacote;
 
-/* Lista Encadeada */
 typedef struct No {
-    int id;
-    char origem[50];
-    char destino[50];
-    int status; // 1 = em trânsito, 2 = entregue, 3 = cancelado
+    Pacote pacote;
     struct No *prox;
 } No;
 
-/* Lista */
-void inserirInicio(int id, char origem[], char destino[]);
-void inserirFinal(int id, char origem[], char destino[]);
-void buscarPacote(int id);
-void atualizar(int idPacote, int novoStatus);
-void remover(int id);
-void exibirLista();
+const char *nomeStatus(StatusPacote status);
+int calcularTempoEstimadoMs(int tamanhoKB);
+Pacote montarPacote(int id, int numeroPacote, int tamanhoKB, const char origem[], const char destino[]);
 
-/* Fila */
 void enfileirarLinear(Pacote pacote);
-Pacote desenfileirarLinear();
-void exibirFilaLinear();
-int filaLinearVazia();
-int filaLinearCheia();
+Pacote desenfileirarLinear(void);
+int removerPacoteDaFila(int numeroPacote, Pacote *saida);
+void exibirFilaLinear(void);
+int filaLinearVazia(void);
+int filaLinearCheia(void);
+void limparFilaLinear(void);
 
-/* Pilha */
 void empilhar(Pacote p);
-Pacote desempilhar();
-void mostrar_pilha();
-int esta_vazia();
-int esta_cheia();
+Pacote desempilhar(void);
+void mostrar_pilha(void);
+int esta_vazia(void);
+int esta_cheia(void);
+void limparPilha(void);
+
+void inserirPacoteAtivo(Pacote pacote);
+int buscarPacotePorNumero(int numeroPacote, Pacote *saida);
+int atualizarStatusPacote(int numeroPacote, StatusPacote novoStatus);
+int removerPacoteEntregue(int numeroPacote);
+void exibirLista(void);
+void limparLista(void);
 
 #endif
