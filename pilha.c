@@ -22,7 +22,7 @@ Pacote desempilhar() {
     if (topo == -1) {
         printf("Erro: Pilha vazia!\n");
         Pacote vazio = {-1};
-        return vazio;   // valor de erro
+        return vazio;
     }
     Pacote valor = pilha[topo];
     int statusPacote = 2; 
@@ -60,6 +60,6 @@ void mostrar_pilha() {
 
     printf("Pilha (do topo para a base):\n");
     for (int i = topo; i >= 0; i--) {
-        printf("ID: %d, Pacote %d -> %d KB\n", pilha[i].id, pilha[i].numeroPacote, pilha[i].tamanhoKB);
+        printf("Pacote %d -> %d KB (Tempo estimado: %.2f segundos)\n", pilha[i].numeroPacote, pilha[i].tamanhoKB, pilha[i].tempoEstimado);
     }
 }

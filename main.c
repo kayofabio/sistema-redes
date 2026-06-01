@@ -7,13 +7,13 @@ int main() {
 
     do
     {
-        printf("\n===== FILA DE PACOTES =====\n");
+        printf("\n===== Sistema de Rede =====\n");
         printf("1 - Adicionar pacote\n");
         printf("2 - Transmitir proximo pacote\n");
         printf("3 - Retransmitir pacote da pilha de erros\n");
         printf("4 - Mostrar pacotes pendentes (fila)\n");
         printf("5 - Mostrar pacotes em erros (pilha)\n");
-        printf("6 - Mostrar historico de pacotes (lista)\n");
+        printf("6 - Mostrar pacotes ativos no sistema (lista)\n");
         printf("0 - Sair\n");
         printf("Escolha: ");
         scanf("%d", &opcao);
@@ -24,10 +24,11 @@ int main() {
             printf("Numero do pacote: ");
             scanf("%d", &p.numeroPacote);
 
-            printf("Pacotes maiores que 500 KB serao enviados para a pilha de erros!\n");
+            printf("Pacotes com 500 ou mais KB serao enviados para a pilha de erros!\n");
             printf("Tamanho (KB): ");
             scanf("%d", &p.tamanhoKB);
 
+            p.tempoEstimado = p.tamanhoKB * 0.001;
             p.id = idPacote;
 
             enfileirarLinear(p);
@@ -44,7 +45,7 @@ int main() {
             else
             {
                 p = desenfileirarLinear();
-                if (p.tamanhoKB > 500) {
+                if (p.tamanhoKB >= 500) {
                     printf("Erro: Pacote %d muito grande. Sera necessario retransmitir!\n", p.numeroPacote);
                     printf("Pacote %d enviado para pilha de erros!\n", p.numeroPacote);
                 } else {
@@ -53,6 +54,7 @@ int main() {
                     printf("ID: %d\n", p.id);
                     printf("Numero: %d\n", p.numeroPacote);
                     printf("Tamanho: %d KB\n", p.tamanhoKB);
+                    printf("Tempo estimado: %.2f segundos\n", p.tempoEstimado);
                 }
             }
             break;
@@ -66,6 +68,7 @@ int main() {
                 printf("ID: %d\n", p.id);
                 printf("Numero: %d\n", p.numeroPacote);
                 printf("Tamanho: %d KB\n", p.tamanhoKB);
+                printf("Tempo estimado: %.2f segundos\n", p.tempoEstimado);
             }
             break;
 

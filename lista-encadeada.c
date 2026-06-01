@@ -130,7 +130,7 @@ void exibirLista() {
     }
 
     printf("Lista:\n");
-    printf("Status: 1 - Em transito | 2 - Entregue | 3 - Cancelado\n");
+    printf("Status: 1 - Em transito | 2 - Entregue | 3 - Erro\n");
 
     while (atual != NULL) {
         printf("ID: %d\n", atual->id);

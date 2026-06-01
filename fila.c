@@ -3,7 +3,7 @@
 #include <string.h>
 #include "rede.h"
  
-#define MAX_SIZE 5 
+#define MAX_SIZE 100
  
 Pacote fila[MAX_SIZE];  
 int frente = 0;
@@ -47,13 +47,13 @@ Pacote desenfileirarLinear() {
     }
     Pacote pacote = fila[frente]; 
     frente++; // Simplesmente avança a frente
-    if (pacote.tamanhoKB > 500) {
-        empilhar(pacote); // Envia para a pilha (erros) se for maior que 500 KB
-        statusPacote = 3; // Atualiza status para cancelado
-        atualizar(pacote.id, statusPacote); // Atualiza o status na lista encadeada
+    if (pacote.tamanhoKB >= 500) {
+        empilhar(pacote);
+        statusPacote = 3; 
+        atualizar(pacote.id, statusPacote); 
     } else {
-        statusPacote = 2; // Atualiza status para entregue
-        atualizar(pacote.id, statusPacote); // Atualiza o status na lista encadeada
+        statusPacote = 2;
+        atualizar(pacote.id, statusPacote);
     }
     return pacote;
 }
@@ -66,6 +66,6 @@ void exibirFilaLinear() {
     }
     printf("Fila:\n");
     for (int i = frente; i <= tras; i++) {
-        printf("ID: %d, Pacote %d -> %d KB\n", fila[i].id, fila[i].numeroPacote, fila[i].tamanhoKB);
+        printf("Pacote %d -> %d KB (Tempo estimado: %.2f segundos)\n", fila[i].numeroPacote, fila[i].tamanhoKB, fila[i].tempoEstimado);
     }
 }

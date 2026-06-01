@@ -10,6 +10,7 @@ typedef struct {
     int id;
     int numeroPacote;
     int tamanhoKB;
+    float tempoEstimado;
 } Pacote;
 
 /* Lista Encadeada */
@@ -17,7 +18,7 @@ typedef struct No {
     int id;
     char origem[50];
     char destino[50];
-    int status; // 1 = em trânsito, 2 = entregue, 3 = cancelado
+    int status; // 1 = em trânsito | 2 = entregue | 3 = cancelado
     struct No *prox;
 } No;
 
