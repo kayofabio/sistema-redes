@@ -1,73 +1,141 @@
 
-===== MICRO MAQUINA DE PACOTES =====
-1  - Adicionar pacote a fila
-2  - Transmitir proximo pacote
-3  - Registrar pacote com erro
-4  - Retransmitir ultimo erro
-5  - Buscar pacote ativo
-6  - Marcar entregue e remover da lista
-7  - Mostrar fila de transmissao
-8  - Mostrar pilha de erros
-9  - Mostrar lista de pacotes ativos
-10 - Executar cenario guiado da Questao 5
-0  - Sair
-Escolha:Numero do pacote: Tamanho (KB): Origem [PC-01]: Destino [SERVIDOR-01]: Fila: pacote 2 aguardando transmissao (300 KB, 3000 ms estimados).
+--- tela limpa ---
 
-===== MICRO MAQUINA DE PACOTES =====
-1  - Adicionar pacote a fila
-2  - Transmitir proximo pacote
-3  - Registrar pacote com erro
-4  - Retransmitir ultimo erro
-5  - Buscar pacote ativo
-6  - Marcar entregue e remover da lista
-7  - Mostrar fila de transmissao
-8  - Mostrar pilha de erros
-9  - Mostrar lista de pacotes ativos
-10 - Executar cenario guiado da Questao 5
-0  - Sair
-Escolha:Numero do pacote: Tamanho (KB): Origem [PC-01]: Destino [SERVIDOR-01]: Fila: pacote 4 aguardando transmissao (200 KB, 2000 ms estimados).
+--- tela limpa ---
+===== Micro Maquina de Pacotes =====
 
-===== MICRO MAQUINA DE PACOTES =====
-1  - Adicionar pacote a fila
-2  - Transmitir proximo pacote
-3  - Registrar pacote com erro
-4  - Retransmitir ultimo erro
-5  - Buscar pacote ativo
-6  - Marcar entregue e remover da lista
-7  - Mostrar fila de transmissao
-8  - Mostrar pilha de erros
-9  - Mostrar lista de pacotes ativos
-10 - Executar cenario guiado da Questao 5
+1  - Cadastrar dispositivo no ambiente
+2  - Mostrar ambiente de rede
+3  - Adicionar pacote a fila
+4  - Transmitir proximo pacote com animacao
+5  - Registrar pacote com erro
+6  - Retransmitir ultimo erro
+7  - Buscar pacote ativo
+8  - Marcar entregue e remover da lista
+9  - Mostrar fila de transmissao
+10 - Mostrar pilha de erros
+11 - Mostrar lista de pacotes ativos
+12 - Executar cenario guiado da Questao 5
 0  - Sair
-Escolha:Numero do pacote com erro: Pilha: pacote 2 registrado para retransmissao.
+Escolha:===== Adicionar pacote =====
 
-===== MICRO MAQUINA DE PACOTES =====
-1  - Adicionar pacote a fila
-2  - Transmitir proximo pacote
-3  - Registrar pacote com erro
-4  - Retransmitir ultimo erro
-5  - Buscar pacote ativo
-6  - Marcar entregue e remover da lista
-7  - Mostrar fila de transmissao
-8  - Mostrar pilha de erros
-9  - Mostrar lista de pacotes ativos
-10 - Executar cenario guiado da Questao 5
-0  - Sair
-Escolha:Numero do pacote com erro: Pilha: pacote 4 registrado para retransmissao.
++-------------+----------+----------------+-------------------+-------------+
+| Nome        | Tipo     | IP             | MAC               | Dominio     |
++-------------+----------+----------------+-------------------+-------------+
+| PC-01       | PC       | 192.168.10.10  | 02:00:00:00:10:10 | -           |
+| SWITCH-01   | Switch   | 0.0.0.0        | 02:00:00:00:00:02 | -           |
+| ROTEADOR-01 | Roteador | 192.168.10.1   | 02:00:00:00:10:01 | -           |
+| DNS-01      | DNS      | 192.168.10.53  | 02:00:00:00:10:53 | dns.local   |
+| SERVIDOR-01 | Servidor | 192.168.20.20  | 02:00:00:00:20:20 | app.local   |
++-------------+----------+----------------+-------------------+-------------+
 
-===== MICRO MAQUINA DE PACOTES =====
-1  - Adicionar pacote a fila
-2  - Transmitir proximo pacote
-3  - Registrar pacote com erro
-4  - Retransmitir ultimo erro
-5  - Buscar pacote ativo
-6  - Marcar entregue e remover da lista
-7  - Mostrar fila de transmissao
-8  - Mostrar pilha de erros
-9  - Mostrar lista de pacotes ativos
-10 - Executar cenario guiado da Questao 5
+Use nome, IP ou dominio cadastrado. Exemplo de destino: app.local.
+
+Numero do pacote:Tamanho (KB):Origem [PC-01]:Destino [app.local]:Fila: pacote 2 aguardando transmissao (300 KB, 3000 ms estimados).
+
+Pressione Enter para continuar...
+--- tela limpa ---
+
+--- tela limpa ---
+===== Micro Maquina de Pacotes =====
+
+1  - Cadastrar dispositivo no ambiente
+2  - Mostrar ambiente de rede
+3  - Adicionar pacote a fila
+4  - Transmitir proximo pacote com animacao
+5  - Registrar pacote com erro
+6  - Retransmitir ultimo erro
+7  - Buscar pacote ativo
+8  - Marcar entregue e remover da lista
+9  - Mostrar fila de transmissao
+10 - Mostrar pilha de erros
+11 - Mostrar lista de pacotes ativos
+12 - Executar cenario guiado da Questao 5
 0  - Sair
-Escolha:
+Escolha:===== Adicionar pacote =====
+
++-------------+----------+----------------+-------------------+-------------+
+| Nome        | Tipo     | IP             | MAC               | Dominio     |
++-------------+----------+----------------+-------------------+-------------+
+| PC-01       | PC       | 192.168.10.10  | 02:00:00:00:10:10 | -           |
+| SWITCH-01   | Switch   | 0.0.0.0        | 02:00:00:00:00:02 | -           |
+| ROTEADOR-01 | Roteador | 192.168.10.1   | 02:00:00:00:10:01 | -           |
+| DNS-01      | DNS      | 192.168.10.53  | 02:00:00:00:10:53 | dns.local   |
+| SERVIDOR-01 | Servidor | 192.168.20.20  | 02:00:00:00:20:20 | app.local   |
++-------------+----------+----------------+-------------------+-------------+
+
+Use nome, IP ou dominio cadastrado. Exemplo de destino: app.local.
+
+Numero do pacote:Tamanho (KB):Origem [PC-01]:Destino [app.local]:Fila: pacote 4 aguardando transmissao (200 KB, 2000 ms estimados).
+
+Pressione Enter para continuar...
+--- tela limpa ---
+
+--- tela limpa ---
+===== Micro Maquina de Pacotes =====
+
+1  - Cadastrar dispositivo no ambiente
+2  - Mostrar ambiente de rede
+3  - Adicionar pacote a fila
+4  - Transmitir proximo pacote com animacao
+5  - Registrar pacote com erro
+6  - Retransmitir ultimo erro
+7  - Buscar pacote ativo
+8  - Marcar entregue e remover da lista
+9  - Mostrar fila de transmissao
+10 - Mostrar pilha de erros
+11 - Mostrar lista de pacotes ativos
+12 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:===== Registrar erro =====
+
+Numero do pacote com erro:Pilha: pacote 2 registrado para retransmissao.
+
+Pressione Enter para continuar...
+--- tela limpa ---
+
+--- tela limpa ---
+===== Micro Maquina de Pacotes =====
+
+1  - Cadastrar dispositivo no ambiente
+2  - Mostrar ambiente de rede
+3  - Adicionar pacote a fila
+4  - Transmitir proximo pacote com animacao
+5  - Registrar pacote com erro
+6  - Retransmitir ultimo erro
+7  - Buscar pacote ativo
+8  - Marcar entregue e remover da lista
+9  - Mostrar fila de transmissao
+10 - Mostrar pilha de erros
+11 - Mostrar lista de pacotes ativos
+12 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:===== Registrar erro =====
+
+Numero do pacote com erro:Pilha: pacote 4 registrado para retransmissao.
+
+Pressione Enter para continuar...
+--- tela limpa ---
+
+--- tela limpa ---
+===== Micro Maquina de Pacotes =====
+
+1  - Cadastrar dispositivo no ambiente
+2  - Mostrar ambiente de rede
+3  - Adicionar pacote a fila
+4  - Transmitir proximo pacote com animacao
+5  - Registrar pacote com erro
+6  - Retransmitir ultimo erro
+7  - Buscar pacote ativo
+8  - Marcar entregue e remover da lista
+9  - Mostrar fila de transmissao
+10 - Mostrar pilha de erros
+11 - Mostrar lista de pacotes ativos
+12 - Executar cenario guiado da Questao 5
+0  - Sair
+Escolha:===== Pilha de erros =====
+
+
 Pilha de erros (topo para base, ordem LIFO)
 +----+---------+---------+----------+-------------+
 | ID | Pacote  | Tamanho | Tempo ms | Status      |
@@ -76,59 +144,84 @@ Pilha de erros (topo para base, ordem LIFO)
 |  1 |       2 |   300KB |     3000 | erro        |
 +----+---------+---------+----------+-------------+
 
-===== MICRO MAQUINA DE PACOTES =====
-1  - Adicionar pacote a fila
-2  - Transmitir proximo pacote
-3  - Registrar pacote com erro
-4  - Retransmitir ultimo erro
-5  - Buscar pacote ativo
-6  - Marcar entregue e remover da lista
-7  - Mostrar fila de transmissao
-8  - Mostrar pilha de erros
-9  - Mostrar lista de pacotes ativos
-10 - Executar cenario guiado da Questao 5
+Pressione Enter para continuar...
+--- tela limpa ---
+
+--- tela limpa ---
+===== Micro Maquina de Pacotes =====
+
+1  - Cadastrar dispositivo no ambiente
+2  - Mostrar ambiente de rede
+3  - Adicionar pacote a fila
+4  - Transmitir proximo pacote com animacao
+5  - Registrar pacote com erro
+6  - Retransmitir ultimo erro
+7  - Buscar pacote ativo
+8  - Marcar entregue e remover da lista
+9  - Mostrar fila de transmissao
+10 - Mostrar pilha de erros
+11 - Mostrar lista de pacotes ativos
+12 - Executar cenario guiado da Questao 5
 0  - Sair
-Escolha:
-Pacote retransmitido pela pilha LIFO:
+Escolha:===== Retransmissao LIFO =====
+
+Pacote retransmitido pela pilha LIFO.
+
 ID: 2
 Pacote: 4
 Tamanho: 200 KB
 Tempo estimado: 2000 ms
 Origem: PC-01
-Destino: SERVIDOR-01
+Destino: app.local
 Status: em_transito
 
-===== MICRO MAQUINA DE PACOTES =====
-1  - Adicionar pacote a fila
-2  - Transmitir proximo pacote
-3  - Registrar pacote com erro
-4  - Retransmitir ultimo erro
-5  - Buscar pacote ativo
-6  - Marcar entregue e remover da lista
-7  - Mostrar fila de transmissao
-8  - Mostrar pilha de erros
-9  - Mostrar lista de pacotes ativos
-10 - Executar cenario guiado da Questao 5
+Pressione Enter para continuar...
+--- tela limpa ---
+
+--- tela limpa ---
+===== Micro Maquina de Pacotes =====
+
+1  - Cadastrar dispositivo no ambiente
+2  - Mostrar ambiente de rede
+3  - Adicionar pacote a fila
+4  - Transmitir proximo pacote com animacao
+5  - Registrar pacote com erro
+6  - Retransmitir ultimo erro
+7  - Buscar pacote ativo
+8  - Marcar entregue e remover da lista
+9  - Mostrar fila de transmissao
+10 - Mostrar pilha de erros
+11 - Mostrar lista de pacotes ativos
+12 - Executar cenario guiado da Questao 5
 0  - Sair
-Escolha:
+Escolha:===== Lista de pacotes ativos =====
+
+
 Lista encadeada de pacotes ativos
 +----+---------+------------+-------------+-------------+
 | ID | Pacote  | Origem     | Destino     | Status      |
 +----+---------+------------+-------------+-------------+
-|  1 |       2 | PC-01      | SERVIDOR-01 | erro        |
-|  2 |       4 | PC-01      | SERVIDOR-01 | em_transito |
+|  1 |       2 | PC-01      | app.local   | erro        |
+|  2 |       4 | PC-01      | app.local   | em_transito |
 +----+---------+------------+-------------+-------------+
 
-===== MICRO MAQUINA DE PACOTES =====
-1  - Adicionar pacote a fila
-2  - Transmitir proximo pacote
-3  - Registrar pacote com erro
-4  - Retransmitir ultimo erro
-5  - Buscar pacote ativo
-6  - Marcar entregue e remover da lista
-7  - Mostrar fila de transmissao
-8  - Mostrar pilha de erros
-9  - Mostrar lista de pacotes ativos
-10 - Executar cenario guiado da Questao 5
+Pressione Enter para continuar...
+--- tela limpa ---
+
+--- tela limpa ---
+===== Micro Maquina de Pacotes =====
+
+1  - Cadastrar dispositivo no ambiente
+2  - Mostrar ambiente de rede
+3  - Adicionar pacote a fila
+4  - Transmitir proximo pacote com animacao
+5  - Registrar pacote com erro
+6  - Retransmitir ultimo erro
+7  - Buscar pacote ativo
+8  - Marcar entregue e remover da lista
+9  - Mostrar fila de transmissao
+10 - Mostrar pilha de erros
+11 - Mostrar lista de pacotes ativos
+12 - Executar cenario guiado da Questao 5
 0  - Sair
 Escolha:Encerrando simulacao.

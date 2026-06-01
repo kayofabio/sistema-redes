@@ -9,13 +9,13 @@ Este roteiro registra os testes mínimos para apresentar a implementação da Qu
 - Comando de compilação:
 
 ```powershell
-tcc main.c pacote.c fila.c pilha.c lista-encadeada.c -o build\sistema-redes.exe
+tcc main.c pacote.c ambiente.c interface.c simulador.c fila.c pilha.c lista-encadeada.c -o build\sistema-redes.exe
 ```
 
 O projeto também deve compilar com GCC/MinGW:
 
 ```bash
-gcc main.c pacote.c fila.c pilha.c lista-encadeada.c -o sistema-redes
+gcc main.c pacote.c ambiente.c interface.c simulador.c fila.c pilha.c lista-encadeada.c -o sistema-redes
 ```
 
 ## Teste 1 - Cenário guiado da Questão 5
@@ -23,7 +23,8 @@ gcc main.c pacote.c fila.c pilha.c lista-encadeada.c -o sistema-redes
 Entrada:
 
 ```text
-10
+12
+
 0
 ```
 
@@ -35,11 +36,14 @@ Validações esperadas:
 - Um pacote entregue é removido da lista.
 - Um pacote com erro aparece na pilha.
 - A fila final mantém Pacotes 3 e 4 aguardando.
+- A saída mostra resolução DNS, ARP do próximo salto e passagem pelo roteador.
 
 Evidência:
 
 - `docs/assets/execucao-cenario-questao-5.txt`
 - `docs/assets/cenario-questao-5.png`
+- `docs/assets/execucao-animacao-pdu.txt`
+- `docs/assets/animacao-pdu.png`
 
 ## Teste 2 - Pilha LIFO
 
@@ -60,9 +64,10 @@ Entrada:
 2
 3
 4
-8
-4
-9
+10
+6
+11
+
 0
 ```
 
@@ -104,6 +109,32 @@ Fluxo manual:
 Resultado esperado:
 
 - O pacote marcado como entregue não aparece mais na lista de ativos.
+
+## Teste 5 - Cadastro de ambiente
+
+Fluxo manual:
+
+1. Selecionar `1 - Cadastrar dispositivo no ambiente`.
+2. Informar tipo `1`, nome `PC-02`, IP `192.168.10.11`, MAC `02:00:00:00:10:11` e domínio `-`.
+3. Selecionar `2 - Mostrar ambiente de rede`.
+
+Resultado esperado:
+
+- O novo dispositivo aparece na tabela do ambiente.
+
+## Teste 6 - Transmissão animada com DNS e ARP
+
+Fluxo manual:
+
+1. Selecionar `3 - Adicionar pacote a fila`.
+2. Informar pacote `1`, tamanho `500`, origem `PC-01` e destino `app.local`.
+3. Selecionar `4 - Transmitir proximo pacote com animacao`.
+
+Resultado esperado:
+
+- O programa mostra a consulta DNS para `app.local`.
+- O programa mostra ARP para o próximo salto.
+- O terminal alterna telas da animação ASCII até o destino.
 
 ## Observações
 

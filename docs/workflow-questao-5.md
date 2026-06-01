@@ -67,6 +67,20 @@ Entregáveis:
 - Evidências de terminal.
 - Registro dos problemas encontrados e decisões.
 
+## Etapa 6.1 - Aprofundamento de rede
+
+Status: concluída.
+
+Itens adicionados:
+
+- Cadastro de ambiente de rede.
+- Resolução de destino por nome, IP ou domínio.
+- Consulta DNS didática.
+- Resolução ARP do próximo salto.
+- Uso de roteador quando origem e destino estão em sub-redes diferentes.
+- Telas limpas por ação.
+- Animação ASCII da PDU no terminal.
+
 ## Etapa 7 - PR
 
 Status: pendente.

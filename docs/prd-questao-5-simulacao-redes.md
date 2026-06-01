@@ -53,6 +53,7 @@ Elementos que serão adaptados para terminal:
 - Lista de eventos: cada ação da simulação deve registrar o que ocorreu, por exemplo chegada, transmissão, falha, retransmissão e entrega.
 - Avanço passo a passo: a simulação deve permitir executar um cenário guiado sem exigir que o avaliador adivinhe a sequência de comandos.
 - Visão do estado da rede: o terminal deve mostrar fila, pilha e lista ativa de forma organizada.
+- Animação textual: a PDU deve atravessar a topologia em quadros simples de terminal.
 - Explicação didática: a documentação deve ligar cada comportamento observado à estrutura de dados correspondente.
 
 Limite assumido:
@@ -67,7 +68,9 @@ Nome de trabalho: Micro Máquina de Pacotes.
 Topologia didática:
 
 ```text
-PC-01 -> SWITCH-01 -> SERVIDOR-01
+PC-01 -> SWITCH-01 -> ROTEADOR-01 -> SERVIDOR-01
+                  |
+                DNS-01
 ```
 
 Estados principais:
@@ -78,6 +81,8 @@ Estados principais:
 | Falha de transmissão | Pilha | Guarda o último pacote com erro no topo para retransmissão. |
 | Ativo na rede | Lista encadeada | Permite buscar, listar e remover pacotes em trânsito ou entregues. |
 | Registro da simulação | Saída textual | Mostra a linha do tempo da execução. |
+| Ambiente de rede | Tabela de dispositivos | Permite cadastrar PC, switch, roteador, servidor e DNS. |
+| Resolução de destino | Busca em tabela | Simula DNS, ARP e decisão de gateway. |
 
 Campos mínimos de `Pacote`:
 
@@ -123,6 +128,9 @@ Estado observado em 2026-06-01:
 | Cenário-base do PDF | Pode ser feito manualmente, mas não existe atalho guiado. | Criar opção "executar cenário da questão 5". |
 | Documentação | Não há README no `sistema-redes`. | Criar README com objetivo, build, execução, screenshots e respostas teóricas. |
 | Evidências | Não há capturas ou roteiro de teste. | Criar pasta de evidências com saídas e imagens da execução. |
+| Tela de terminal | Menu reaparece sem limpar a tela. | Usar telas limpas por ação, como um app de terminal. |
+| Visualização do pacote | Não há animação. | Criar animação ASCII da PDU passando pela topologia. |
+| Rede conceitual | Não há DNS, ARP ou roteador no fluxo. | Simular resolução DNS, ARP e encaminhamento por gateway. |
 
 ## 7. Decisão sobre framework de terminal
 
@@ -192,6 +200,24 @@ RF08 - Executar cenário guiado da Questão 5.
 RF09 - Responder às perguntas teóricas no README.
 
 - As respostas devem usar o comportamento real da simulação como exemplo.
+
+RF10 - Cadastrar ambiente de rede.
+
+- Deve permitir cadastrar dispositivo com nome, tipo, IP, MAC e domínio opcional.
+- Deve iniciar com ambiente padrão para facilitar demonstração.
+
+RF11 - Resolver destino antes da transmissão.
+
+- Deve aceitar destino por nome, IP ou domínio.
+- Deve mostrar consulta DNS quando o destino for domínio.
+- Deve mostrar resolução ARP para o próximo salto.
+- Deve mostrar uso do roteador quando origem e destino estiverem em sub-redes diferentes.
+
+RF12 - Animar troca de pacote.
+
+- Deve limpar a tela entre quadros.
+- Deve mostrar a PDU passando pela topologia.
+- Deve manter a simulação executável em terminal comum.
 
 ## 9. Requisitos não funcionais
 
@@ -289,11 +315,13 @@ Teste manual D - Cenário guiado:
 Arquivos criados:
 
 - `docs/assets/cenario-questao-5.png`
+- `docs/assets/animacao-pdu.png`
 - `docs/assets/pilha-lifo.png`
 - `docs/assets/execucao-cenario-questao-5.txt`
+- `docs/assets/execucao-animacao-pdu.txt`
 - `docs/assets/execucao-pilha-lifo.txt`
 
-As imagens foram renderizadas a partir da saída textual real do executável local. Os arquivos `.txt` preservam o transcript completo usado para gerar as evidências visuais.
+As imagens foram renderizadas a partir da saída textual real do executável local, com separadores de tela normalizados para leitura. Os arquivos `.txt` preservam o transcript usado para gerar as evidências visuais.
 
 ## 14. Problemas já observados e decisões
 
@@ -329,5 +357,7 @@ Problema 5 - A lista atual mantém pacotes entregues como status, mas o enunciad
 
 - Cisco Packet Tracer Data Sheet: https://www.cisco.com/c/dam/en_us/training-events/netacad/course_catalog/docs/Cisco_PacketTracer_DS.pdf
 - Packet Tracer Help - Operating Modes: https://tutorials.ptnetacad.net/help/default/operatingModes.htm
+- RFC 826 - Address Resolution Protocol: https://www.rfc-editor.org/rfc/rfc826
+- RFC 1035 - Domain Names: https://www.rfc-editor.org/rfc/rfc1035
 - PDCurses User Guide: https://pdcurses.org/docs/USERS.html
 - PDCurses for Windows console: https://pdcurses.org/wincon/

@@ -15,6 +15,7 @@ O trabalho foi direcionado para transformar o código em uma micro simulação d
 5. O pacote entregue continuava na lista, embora a atividade pedisse remoção de pacote entregue.
 6. Não havia README, roteiro de teste ou evidência de execução.
 7. Não havia uma opção que reproduzisse a situação prática da Questão 5 do começo ao fim.
+8. Não havia cadastro do ambiente de rede, resolução de destino nem visualização do deslocamento do pacote.
 
 ## Decisões tomadas
 
@@ -54,6 +55,20 @@ Isso reduz erro de apresentação, porque o avaliador consegue ver:
 - pacote com erro enviado à pilha;
 - resposta direta sobre o primeiro pacote transmitido.
 
+### Aprofundar a rede sem criar um projeto grande
+
+Foi adicionada uma camada didática de rede com cadastro de dispositivos, resolução por DNS, resolução IP para MAC por ARP e animação ASCII da PDU.
+
+Motivo técnico:
+
+- A simulação passa a mostrar o que acontece antes do pacote sair da fila.
+- O usuário consegue ver por que um roteador aparece quando origem e destino estão em sub-redes diferentes.
+- A interface continua sendo um programa C de terminal, sem dependência externa obrigatória.
+
+Motivo não técnico:
+
+- A apresentação fica mais próxima de uma ferramenta de laboratório: o usuário cadastra o ambiente, escolhe uma ação e vê uma tela de resultado.
+
 ## Problemas encontrados e correções
 
 ### Problema 1 - Ambiente sem compilador C no PATH
@@ -92,6 +107,18 @@ Correção adotada:
 - Foi criada a função `removerPacoteEntregue`.
 - O cenário guiado entrega o Pacote 1 e remove esse pacote da lista ativa.
 
+### Problema 5 - O fluxo não explicava DNS, ARP e roteador
+
+O projeto anterior só mostrava fila, pilha e lista. Isso atendia a estrutura de dados, mas deixava fraca a explicação de rede.
+
+Correção adotada:
+
+- Foi criado `ambiente.c` para cadastrar PC, switch, roteador, DNS e servidor.
+- O destino pode ser informado por nome, IP ou domínio.
+- Quando o destino é um domínio, o programa mostra uma consulta DNS simulada.
+- Quando o pacote vai sair da origem, o programa mostra a resolução ARP do próximo salto.
+- Quando origem e destino estão em sub-redes diferentes, o programa usa o roteador cadastrado.
+
 ## Explicação para pessoas não técnicas
 
 O programa pode ser entendido como uma fila de atendimento de pacotes:
@@ -120,10 +147,14 @@ A pilha usa vetor fixo com índice `topo`. O último erro registrado é o primei
 
 A lista encadeada usa alocação dinâmica para manter os pacotes ativos. Ela permite busca por número, atualização de status e remoção de nó entregue.
 
+O ambiente de rede usa uma tabela simples em memória. Essa tabela não substitui DNS, ARP ou roteamento real; ela representa esses conceitos para que o aluno consiga explicar a sequência de decisão.
+
 ## Evidências
 
 - Cenário guiado: `docs/assets/execucao-cenario-questao-5.txt`
 - Imagem do cenário: `docs/assets/cenario-questao-5.png`
+- Animação de PDU: `docs/assets/execucao-animacao-pdu.txt`
+- Imagem da animação: `docs/assets/animacao-pdu.png`
 - Pilha LIFO: `docs/assets/execucao-pilha-lifo.txt`
 - Imagem da pilha: `docs/assets/pilha-lifo.png`
 
