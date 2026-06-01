@@ -11,10 +11,10 @@ O projeto utiliza diferentes estruturas de dados implementadas manualmente, apli
 ### Gerenciamento de pacotes em transmissão
 
 * Cadastro de pacotes contendo:
-
   * ID
   * Número do pacote
   * Tamanho (KB)
+  * Tempo estimado
 
 * Enfileiramento de pacotes para transmissão
 
@@ -32,6 +32,10 @@ O projeto utiliza diferentes estruturas de dados implementadas manualmente, apli
 
 * Remoção de pacotes entregues
 
+* Cadastro de pacotes ativos no sistema:
+  * ID
+  * Origem
+  * Destino
 * Listagem de pacotes ativos
 
 ---
@@ -67,11 +71,11 @@ O projeto utiliza diferentes estruturas de dados implementadas manualmente, apli
 
 ```text
 rede/
-├── rede.h              # Structs, defines e protótipos das funções
-├── main.c              # Menu principal e controle do sistema
-├── fila.c              # Fila linear de pacotes aguardando transmissão
-├── pilha.c             # Pilha de pacotes com erro
-└── lista-encadeada.c   # Lista encadeada de pacotes ativos na rede
+├── rede.h      # Structs, defines e protótipos das funções
+├── main.c      # Menu principal e controle do sistema
+├── fila.c      # Fila linear de pacotes aguardando transmissão
+├── pilha.c     # Pilha de pacotes com erro
+└── lista-encadeada.c     # Lista encadeada de pacotes ativos na rede
 ```
 
 ---
