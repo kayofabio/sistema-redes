@@ -77,6 +77,28 @@ No PowerShell, o script versionado padroniza a compilação e escolhe `gcc`, `cl
 .\scripts\build.ps1
 ```
 
+## Apresentação em máquina restrita
+
+Se o computador da universidade não permite executar scripts, instalar ferramentas ou compilar código, prepare o executável antes da apresentação em outra máquina Windows.
+
+Na máquina usada para preparar a entrega:
+
+1. Compile o projeto e gere `sistema-redes.exe`.
+2. Crie uma pasta chamada `sistema-redes-apresentacao`.
+3. Coloque `sistema-redes.exe` dentro dessa pasta.
+4. Compacte a pasta como ZIP.
+5. Leve também uma cópia separada do código-fonte para consulta durante a apresentação.
+
+Na máquina da universidade:
+
+1. Extraia o ZIP.
+2. Abra a pasta extraída.
+3. Execute `sistema-redes.exe` com dois cliques.
+4. Digite `1` para iniciar a demo pronta.
+5. Pressione Enter depois de explicar cada etapa.
+
+Esse fluxo não executa `.ps1`, não instala compilador e não exige administrador. O `.exe` precisa ter sido gerado para Windows compatível. Se a política da instituição bloquear executáveis externos, será necessário solicitar liberação ao responsável pelo laboratório.
+
 ## Portabilidade e privilégio mínimo
 
 O simulador foi projetado para execução local com usuário comum. Ele não exige administrador, não usa rede real, não abre arquivos, não altera registro do Windows, não cria serviço e não depende de banco de dados.

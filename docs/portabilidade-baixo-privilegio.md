@@ -80,6 +80,7 @@ Isso significa que o código atual:
 | Linux com GCC ou Clang | Deve compilar e rodar como binário local. |
 | macOS com Clang | Deve compilar e rodar como binário local. |
 | Máquina sem compilador | Roda apenas se já houver executável compatível. |
+| Laboratório que não permite scripts | Deve receber um `.exe` Windows preparado anteriormente; a execução da demo não depende de `.ps1`. |
 | Pasta sem permissão de escrita | Pode rodar executável existente, mas não compilar novo binário ali. |
 | Ambiente que bloqueia executáveis baixados | Pode exigir compilar localmente ou liberar o arquivo conforme política da instituição. |
 
@@ -95,6 +96,8 @@ O build local pode ser padronizado pelo script:
 ```powershell
 .\scripts\build.ps1
 ```
+
+O script é uma conveniência para a máquina de desenvolvimento. Ele não é necessário para executar a demo em uma máquina restrita quando o `.exe` compatível já foi preparado.
 
 ## 7. Evidências relacionadas
 

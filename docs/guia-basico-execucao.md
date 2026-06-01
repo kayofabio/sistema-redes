@@ -43,7 +43,34 @@ Para compilar, precisa ter uma destas ferramentas:
 
 Na validação local deste projeto foi usado TinyCC portátil, porque ele não exigiu instalação administrativa.
 
-## 3. Como abrir o terminal no Windows
+## 3. Como levar para uma máquina da universidade sem scripts
+
+Use este caminho quando o computador da universidade não permite executar `.ps1`, instalar compilador ou compilar código.
+
+### Na máquina usada para preparar a entrega
+
+1. Compile o projeto em um computador Windows permitido.
+2. Confirme que o arquivo `sistema-redes.exe` abre normalmente.
+3. Crie uma pasta chamada `sistema-redes-apresentacao`.
+4. Coloque o arquivo `sistema-redes.exe` dentro dessa pasta.
+5. Compacte a pasta como ZIP.
+6. Leve também outra pasta com o código-fonte para consulta durante a apresentação.
+
+O executável não deve ser versionado no Git. Ele é um artefato local preparado especificamente para a apresentação.
+
+### Na máquina da universidade
+
+1. Extraia o ZIP.
+2. Abra a pasta `sistema-redes-apresentacao`.
+3. Dê dois cliques em `sistema-redes.exe`.
+4. Digite `1` para iniciar a demo pronta.
+5. Pressione Enter depois de explicar cada etapa.
+
+Não é necessário executar script, instalar compilador, acessar internet ou usar conta de administrador.
+
+Se a política da instituição bloquear executáveis externos, solicite liberação ao responsável pelo laboratório. O projeto não tenta contornar restrições da máquina.
+
+## 4. Como abrir o terminal no Windows
 
 1. Abra a pasta do projeto.
 2. Clique na barra de endereço da pasta.
@@ -60,7 +87,7 @@ dir
 
 Resultado esperado: aparecerem arquivos como `main.c`, `menu.c`, `rede.h` e a pasta `docs`.
 
-## 4. Como compilar no Windows
+## 5. Como compilar no Windows
 
 ### Forma recomendada com PowerShell
 
@@ -76,6 +103,12 @@ Use este comando:
 
 ```powershell
 tcc -Wall main.c menu.c pacote.c ambiente.c interface.c simulador.c fila.c pilha.c lista-encadeada.c -o sistema-redes.exe
+```
+
+Se estiver preparando a entrega nesta máquina e o TinyCC portátil estiver dentro de `build\tools`, o comando completo é:
+
+```powershell
+.\build\tools\tcc-0.9.27\tcc\tcc.exe -Wall -Werror main.c menu.c pacote.c ambiente.c interface.c simulador.c fila.c pilha.c lista-encadeada.c -o build\sistema-redes.exe
 ```
 
 O que cada parte faz:
@@ -99,7 +132,7 @@ gcc main.c menu.c pacote.c ambiente.c interface.c simulador.c fila.c pilha.c lis
 
 Se o terminal responder que `gcc` não foi encontrado, significa que o GCC não está instalado ou não está no PATH.
 
-## 5. Como compilar no Linux ou macOS
+## 6. Como compilar no Linux ou macOS
 
 Abra o terminal na pasta do projeto e rode:
 
@@ -119,7 +152,7 @@ No macOS, se usar Clang:
 clang main.c menu.c pacote.c ambiente.c interface.c simulador.c fila.c pilha.c lista-encadeada.c -o sistema-redes
 ```
 
-## 6. Como executar no Windows
+## 7. Como executar no Windows
 
 Depois de compilar, rode:
 
@@ -135,7 +168,7 @@ Se o executável estiver dentro da pasta `build`, use:
 .\build\sistema-redes.exe
 ```
 
-## 7. Como usar a demo pronta
+## 8. Como usar a demo pronta
 
 Quando o menu abrir, escolha:
 
@@ -159,7 +192,7 @@ Pressione Enter para continuar...
 
 leia a tela, explique o que aconteceu e só então pressione Enter.
 
-## 8. O que observar na demo
+## 9. O que observar na demo
 
 Na demo, observe esta sequência:
 
@@ -174,7 +207,7 @@ Na demo, observe esta sequência:
 9. A pilha mostra o Pacote 1 aguardando retransmissão.
 10. A lista mostra os pacotes que ainda estão ativos.
 
-## 9. Como cadastrar um dispositivo
+## 10. Como cadastrar um dispositivo
 
 No menu principal:
 
@@ -208,7 +241,7 @@ Depois, use:
 
 para confirmar que o dispositivo apareceu.
 
-## 10. Como adicionar um pacote manualmente
+## 11. Como adicionar um pacote manualmente
 
 No menu principal:
 
@@ -237,7 +270,7 @@ Depois escolha:
 2 - Transmitir proximo pacote com animacao
 ```
 
-## 11. Capacidade e sobrecarga
+## 12. Capacidade e sobrecarga
 
 O projeto tem limites fixos para facilitar apresentação e teste.
 
@@ -259,7 +292,7 @@ Por isso, o usuário consegue cadastrar mais 7 dispositivos antes de atingir `MA
 
 Importante: esse limite não é velocidade de rede. É a capacidade didática das estruturas dentro do programa.
 
-## 12. Ferramentas usadas no projeto
+## 13. Ferramentas usadas no projeto
 
 | Ferramenta | Uso no projeto |
 | --- | --- |
@@ -282,7 +315,7 @@ Evidência das ferramentas:
 - `docs/assets/evidencia-ferramentas-validacao.png`
 - `docs/assets/evidencia-ferramentas-validacao.txt`
 
-## 13. Erros comuns
+## 14. Erros comuns
 
 | Erro | O que significa | Como resolver |
 | --- | --- | --- |
@@ -293,7 +326,7 @@ Evidência das ferramentas:
 | A tela limpa e muda | É o comportamento do app de terminal. | Ler a etapa e pressionar Enter quando solicitado. |
 | Destino não encontrado | Nome, IP ou domínio não existe no ambiente. | Verificar o ambiente cadastrado ou usar `app.local`. |
 
-## 14. Ordem recomendada para apresentação
+## 15. Ordem recomendada para apresentação
 
 1. Abrir o terminal.
 2. Rodar o executável.
@@ -306,7 +339,7 @@ Evidência das ferramentas:
 9. Abrir o cadastro de ambiente.
 10. Mostrar os limites de sobrecarga.
 
-## 15. Fechamento
+## 16. Fechamento
 
 Para uma pessoa não técnica, o caminho mais seguro é:
 
