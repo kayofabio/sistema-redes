@@ -44,7 +44,7 @@ Perguntas teóricas que a documentação deve responder:
 - Por que a lista encadeada ajuda no controle de pacotes ativos?
 - Qual estrutura representa melhor atraso de fila?
 
-A `origin/main` recebeu posteriormente o arquivo `simulacao-e-respostas.pdf`. Esse documento contém uma regra adicional criada para teste: pacotes com `500 KB` ou mais iriam para a pilha de erros. Como essa regra não aparece no enunciado original, ela precisa de alinhamento do grupo antes de alterar o comportamento do simulador.
+A `origin/main` recebeu posteriormente o arquivo `simulacao-e-respostas.pdf`. Esse documento contém uma regra adicional criada para teste: pacotes com `500 KB` ou mais vão para a pilha de erros. A integração manteve essa regra somente no cenário guiado. As operações manuais continuam com erro explícito para permitir retransmissão sem ciclo automático.
 
 ## 3. Referencia conceitual: Packet Tracer
 
@@ -195,7 +195,9 @@ RF08 - Executar cenário guiado da Questão 5.
 
 - Deve inserir os quatro pacotes do enunciado.
 - Deve transmitir dois pacotes.
-- Deve registrar um erro e mover o pacote para a pilha.
+- Deve aplicar a regra de teste do grupo: pacote com `500 KB` ou mais simula falha na primeira transmissão.
+- Deve mover o Pacote 1 para a pilha.
+- Deve entregar e remover o Pacote 2 da lista ativa.
 - Deve remover um pacote entregue da lista.
 - Deve imprimir uma linha do tempo do que aconteceu.
 
@@ -264,7 +266,7 @@ RNF08 - Apresentação acompanhável.
 
 ## 10. Critérios de aceite
 
-CA01 - Ao executar o cenário-base, o primeiro pacote transmitido deve ser o Pacote 1, pois ele foi o primeiro a entrar na fila.
+CA01 - Ao executar o cenário-base, o primeiro pacote retirado da fila deve ser o Pacote 1, pois ele foi o primeiro a entrar. A demo deve registrar sua falha conforme a regra de teste por tamanho.
 
 CA02 - Se Pacote 2 e Pacote 4 forem registrados com erro nessa ordem, o primeiro retransmitido deve ser o Pacote 4, pois a pilha remove o último item inserido.
 
@@ -412,7 +414,7 @@ Problema 13 - A `origin/main` avançou durante a implementação.
 
 Problema 14 - O PDF novo do grupo acrescenta uma regra que não está no enunciado original.
 
-- Decisão: registrar a divergência e confirmar com o grupo se a regra de erro por tamanho deve virar modo opcional, regra principal ou apenas exemplo documental.
+- Decisão: aplicar a regra por tamanho somente no cenário guiado. O modo manual preserva erro explícito e retransmissão funcional.
 
 ## 15. Fora de escopo
 

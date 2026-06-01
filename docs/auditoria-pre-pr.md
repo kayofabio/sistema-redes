@@ -6,25 +6,23 @@ Escopo: revisão local completa antes de abrir PR para `kayofabio/sistema-redes`
 
 ## 1. Parecer
 
-O simulador atende ao núcleo da Questão 5 e possui regressão local reproduzível. O PR ainda não deve ser aberto porque a `origin/main` avançou quatro commits durante o desenvolvimento e trouxe alterações conflitantes nos módulos centrais.
-
-Antes da publicação, a branch precisa ser reconciliada com a principal e validada novamente.
+O simulador atende ao núcleo da Questão 5 e possui regressão local reproduzível. A branch foi reconciliada com a `origin/main`, o PDF do grupo foi preservado e os conflitos foram resolvidos mantendo a implementação modular auditada.
 
 ## 2. Fonte de verdade e divergência documental
 
 A fonte principal continua sendo o enunciado original da Questão 5: fila, pilha, lista encadeada, quatro pacotes, duas transmissões, uma falha e uma entrega removida.
 
-A `origin/main` adicionou `simulacao-e-respostas.pdf`. O arquivo inclui uma regra criada para teste: pacotes com `500 KB` ou mais são enviados para a pilha de erros. Essa regra não aparece no enunciado original.
+A `origin/main` adicionou `simulacao-e-respostas.pdf`. O arquivo inclui uma regra criada para teste: pacotes com `500 KB` ou mais são enviados para a pilha de erros.
 
-Pendência para o grupo:
+Decisão aplicada:
 
-- manter falha explícita como comportamento principal;
-- transformar a regra por tamanho em modo opcional;
-- ou assumir a regra por tamanho como decisão do grupo e atualizar código, demo e documentação.
+- a demo guiada usa a regra por tamanho para reproduzir o teste do grupo;
+- o modo manual mantém falha explícita;
+- retransmissões manuais não ficam presas em um ciclo automático de erro.
 
-## 3. Bloqueio de integração
+## 3. Integração com a principal
 
-Situação medida em 2026-06-01:
+Situação encontrada antes da integração:
 
 ```text
 branch local: 3 commits à frente
@@ -40,7 +38,7 @@ Arquivos com conflito previsto pela análise de merge:
 - `pilha.c`;
 - `rede.h`.
 
-O PDF `simulacao-e-respostas.pdf` existente na `origin/main` deve ser preservado durante a integração. A principal ainda contém `main.exe`; a remoção do binário antigo deve ser mantida conscientemente após resolver os conflitos.
+O PDF `simulacao-e-respostas.pdf` foi preservado durante a integração. A principal ainda continha `main.exe`; a remoção do binário antigo foi mantida conscientemente após resolver os conflitos.
 
 ## 4. Falhas encontradas e corrigidas
 
@@ -111,12 +109,10 @@ Não estavam disponíveis no ambiente local:
 
 Antes da entrega final, é recomendável compilar em pelo menos mais um ambiente e rodar Cppcheck. Valgrind/Memcheck depende de ambiente compatível, normalmente Linux.
 
-## 7. Próxima sequência
+## 7. Fechamento
 
-1. Confirmar com o grupo a regra adicional do PDF novo.
-2. Reconciliar a branch com a `origin/main`.
-3. Preservar `simulacao-e-respostas.pdf`.
-4. Resolver conflitos sem perder as validações adicionadas.
-5. Rodar `.\scripts\validar-projeto.ps1`.
-6. Regenerar evidências afetadas pela integração.
-7. Revisar o diff final antes de abrir PR.
+Concluído antes de abrir o PR:
+
+1. `.\scripts\validar-projeto.ps1` executado após a integração.
+2. Evidências regeneradas com `.\scripts\gerar-evidencias.ps1`.
+3. Estado final conferido: Pacote 1 na pilha, Pacote 2 removido da lista e Pacotes 3 e 4 aguardando na fila.

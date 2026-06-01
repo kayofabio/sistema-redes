@@ -1,4 +1,4 @@
-5. Estado final da micro maquina.
+4. Estado final da micro maquina.
 
 Fila de transmissao (ordem FIFO)
 +------------+------------+------------+--------------+-------------+
@@ -12,16 +12,16 @@ Pilha de erros (topo para base, ordem LIFO)
 +------------+------------+------------+--------------+-------------+
 | ID         | Pacote     | Tamanho KB | Tempo ms     | Status      |
 +------------+------------+------------+--------------+-------------+
-|          2 |          2 |        300 |         3000 | erro        |
+|          1 |          1 |        500 |         5000 | erro        |
 +------------+------------+------------+--------------+-------------+
 
 Lista encadeada de pacotes ativos
 +------------+------------+--------------------+--------------------+-------------+
 | ID         | Pacote     | Origem             | Destino            | Status      |
 +------------+------------+--------------------+--------------------+-------------+
-|          2 |          2 | PC-01              | app.local          | erro        |
+|          1 |          1 | PC-01              | app.local          | erro        |
 |          3 |          3 | PC-01              | app.local          | aguardando  |
 |          4 |          4 | PC-01              | app.local          | aguardando  |
 +------------+------------+--------------------+--------------------+-------------+
 
-Resposta direta: o primeiro pacote transmitido e o Pacote 1, pois a fila segue FIFO.
+Resposta direta: o primeiro pacote retirado da fila e o Pacote 1, pois a fila segue FIFO.

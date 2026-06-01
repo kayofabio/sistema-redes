@@ -164,14 +164,14 @@ leia a tela, explique o que aconteceu e só então pressione Enter.
 Na demo, observe esta sequência:
 
 1. Os quatro pacotes entram na fila.
-2. O Pacote 1 sai primeiro, porque a fila é FIFO.
+2. O Pacote 1 sai primeiro da fila, porque a fila é FIFO.
 3. O destino `app.local` é resolvido pelo DNS.
 4. O roteador aparece porque origem e destino estão em sub-redes diferentes.
 5. O ARP mostra o MAC do próximo salto.
 6. A animação mostra a PDU passando pela topologia.
-7. O Pacote 1 é entregue e removido da lista ativa.
-8. O Pacote 2 é marcado como erro.
-9. A pilha mostra o Pacote 2 aguardando retransmissão.
+7. O Pacote 1 simula falha porque possui `500 KB`, limite adotado pelo grupo para teste da demo.
+8. O Pacote 2 é transmitido, entregue e removido da lista ativa.
+9. A pilha mostra o Pacote 1 aguardando retransmissão.
 10. A lista mostra os pacotes que ainda estão ativos.
 
 ## 9. Como cadastrar um dispositivo
@@ -300,8 +300,8 @@ Evidência das ferramentas:
 3. Escolher a opção `1`.
 4. Explicar a entrada dos quatro pacotes.
 5. Explicar DNS, ARP e roteador antes da animação.
-6. Explicar FIFO após o Pacote 1 sair primeiro.
-7. Explicar erro e pilha com o Pacote 2.
+6. Explicar FIFO após o Pacote 1 sair primeiro da fila.
+7. Explicar a regra de teste e a pilha com o Pacote 1.
 8. Mostrar o estado final.
 9. Abrir o cadastro de ambiente.
 10. Mostrar os limites de sobrecarga.

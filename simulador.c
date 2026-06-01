@@ -2,6 +2,8 @@
 
 #include "rede.h"
 
+#define LIMITE_ERRO_CENARIO_KB 500
+
 static int proximoId = 1;
 
 static void exibirPacote(Pacote pacote) {
@@ -36,13 +38,19 @@ static int resolverPacoteParaTransmissao(Pacote pacote, Dispositivo *origem, Dis
     return 1;
 }
 
-static void apresentarTransmissaoResolvida(Pacote pacote, const Dispositivo *origem, const Dispositivo *destino, TipoRota tipoRota, const char relatorio[]) {
+static void apresentarTransmissaoResolvida(Pacote pacote, const Dispositivo *origem, const Dispositivo *destino, TipoRota tipoRota, const char relatorio[], int simularFalha) {
     printf("%s", relatorio);
     printf("\nRevise a resolucao acima. A proxima tela mostra a animacao da PDU.\n");
     pausarTela();
     animarTransmissaoPacote(pacote, origem, destino, tipoRota);
     limparTela();
     mostrarCabecalho("Resultado da transmissao");
+
+    if (simularFalha) {
+        printf("Regra de teste do cenario: pacotes com %d KB ou mais simulam falha.\n", LIMITE_ERRO_CENARIO_KB);
+        registrarFalhaPacote(pacote);
+        return;
+    }
 
     pacote.status = STATUS_EM_TRANSITO;
     atualizarStatusPacote(pacote.numeroPacote, STATUS_EM_TRANSITO);
@@ -124,7 +132,7 @@ void adicionarPacoteManual(void) {
     proximoId++;
 }
 
-void transmitirProximoPacote(void) {
+static void processarProximaTransmissao(int aplicarRegraCenario) {
     Pacote pacote;
 
     if (!consultarPrimeiroFila(&pacote)) {
@@ -136,6 +144,7 @@ void transmitirProximoPacote(void) {
     Dispositivo destino;
     TipoRota tipoRota;
     char relatorio[TAM_RELATORIO];
+    int simularFalha = aplicarRegraCenario && pacote.tamanhoKB >= LIMITE_ERRO_CENARIO_KB;
 
     if (!resolverPacoteParaTransmissao(pacote, &origem, &destino, &tipoRota, relatorio)) {
         if (!registrarFalhaPacote(pacote)) {
@@ -147,8 +156,17 @@ void transmitirProximoPacote(void) {
         return;
     }
 
+    if (simularFalha && esta_cheia()) {
+        printf("Pilha de erros cheia. Pacote %d permaneceu na fila para evitar perda de estado.\n", pacote.numeroPacote);
+        return;
+    }
+
     desenfileirarLinear();
-    apresentarTransmissaoResolvida(pacote, &origem, &destino, tipoRota, relatorio);
+    apresentarTransmissaoResolvida(pacote, &origem, &destino, tipoRota, relatorio, simularFalha);
+}
+
+void transmitirProximoPacote(void) {
+    processarProximaTransmissao(0);
 }
 
 void registrarErroManual(void) {
@@ -199,7 +217,7 @@ void retransmitirUltimoErro(void) {
         return;
     }
 
-    apresentarTransmissaoResolvida(pacote, &origem, &destino, tipoRota, relatorio);
+    apresentarTransmissaoResolvida(pacote, &origem, &destino, tipoRota, relatorio, 0);
 }
 
 void buscarPacoteAtivo(void) {
@@ -260,6 +278,7 @@ static void pausarEtapaCenario(void) {
 void executarCenarioQuestao5(void) {
     mostrarCabecalho("Cenario guiado da Questao 5");
     printf("Ambiente usado: PC-01 envia pacotes para app.local, resolvido pelo DNS local.\n\n");
+    printf("Regra de teste: pacotes com %d KB ou mais simulam falha na primeira transmissao.\n\n", LIMITE_ERRO_CENARIO_KB);
 
     limparFilaLinear();
     limparPilha();
@@ -274,28 +293,21 @@ void executarCenarioQuestao5(void) {
     pausarEtapaCenario();
 
     printf("\n2. Primeira transmissao com resolucao DNS, ARP e animacao.\n");
-    transmitirProximoPacote();
-
-    atualizarStatusPacote(1, STATUS_ENTREGUE);
-    if (removerPacoteEntregue(1) == 1) {
-        printf("\nPacote 1 entregue e removido da lista ativa.\n");
-    }
+    processarProximaTransmissao(1);
     pausarEtapaCenario();
 
     printf("\n3. Segunda transmissao.\n");
-    transmitirProximoPacote();
-    pausarEtapaCenario();
+    processarProximaTransmissao(1);
 
-    printf("\n4. Simulacao de erro no Pacote 2.\n");
-    Pacote pacoteErro;
-    if (buscarPacotePorNumero(2, &pacoteErro)) {
-        registrarFalhaPacote(pacoteErro);
+    atualizarStatusPacote(2, STATUS_ENTREGUE);
+    if (removerPacoteEntregue(2) == 1) {
+        printf("\nPacote 2 entregue e removido da lista ativa.\n");
     }
     pausarEtapaCenario();
 
-    printf("\n5. Estado final da micro maquina.\n");
+    printf("\n4. Estado final da micro maquina.\n");
     exibirFilaLinear();
     mostrar_pilha();
     exibirLista();
-    printf("\nResposta direta: o primeiro pacote transmitido e o Pacote 1, pois a fila segue FIFO.\n");
+    printf("\nResposta direta: o primeiro pacote retirado da fila e o Pacote 1, pois a fila segue FIFO.\n");
 }

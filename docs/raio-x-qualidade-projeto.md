@@ -131,7 +131,7 @@ Leitura da medição:
 | Teste | Objetivo | Resultado |
 | --- | --- | --- |
 | Build com TinyCC | Confirmar que o projeto compila localmente no Windows | Passou com `tcc -Wall -Werror`. |
-| Demo da Questão 5 | Validar fila, pilha, lista, DNS, ARP e PDU | Passou. Pacote 1 foi transmitido primeiro; Pacote 2 foi para a pilha. |
+| Demo da Questão 5 | Validar fila, pilha, lista, DNS, ARP e PDU | Passou. Pacote 1 saiu primeiro da fila e simulou falha; Pacote 2 foi entregue e removido. |
 | Cadastro de ambiente | Confirmar inclusão de PC adicional | Passou com `PC-02`. |
 | Sobrecarga de fila | Confirmar limite de `MAX_FILA = 20` | Passou. A tentativa seguinte foi recusada. |
 | Destino inexistente | Confirmar erro controlado de rota | Passou. Pacote foi marcado como erro e empilhado. |
@@ -231,12 +231,10 @@ Leitura prática:
 
 ## 9. Lacunas restantes
 
-1. Reconciliar a branch com a `origin/main`, que avançou quatro commits e possui conflitos nos módulos centrais.
-2. Alinhar com o grupo a regra adicional do PDF novo da `origin/main`: enviar pacotes de `500 KB` ou mais para erro.
-3. Rodar Cppcheck quando a ferramenta estiver disponível.
-4. Rodar Valgrind/Memcheck quando houver ambiente Linux disponível.
-5. Validar com GCC/MinGW e Clang em ambientes compatíveis.
-6. Criar modo `--demo` ou `--test` se o grupo quiser capturas sem prompts interativos.
+1. Rodar Cppcheck quando a ferramenta estiver disponível.
+2. Rodar Valgrind/Memcheck quando houver ambiente Linux disponível.
+3. Validar com GCC/MinGW e Clang em ambientes compatíveis.
+4. Criar modo `--demo` ou `--test` se o grupo quiser capturas sem prompts interativos.
 
 ## 10. Pesquisa usada como base
 
@@ -254,4 +252,4 @@ Referências consultadas para orientar decisões, não para copiar texto:
 
 O projeto está apresentável e funcional para a Questão 5, com build e regressão local reproduzíveis. O usuário abre o terminal, roda a demo, entende fila, pilha e lista e consegue enxergar DNS, ARP e roteador em uma micro rede.
 
-Ainda não deve ser publicado como PR: primeiro é necessário reconciliar a branch com a `origin/main`, alinhar a regra adicional presente no PDF novo do grupo e repetir a validação após essa integração.
+A branch foi reconciliada com a `origin/main`, o PDF do grupo foi preservado e a regra adicional ficou restrita ao cenário guiado. A regressão final passou e as evidências foram regeneradas.

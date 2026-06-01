@@ -43,9 +43,10 @@ function Add-PacketInput {
 
 & $buildScript -Compiler $Compiler -Output $executable -WarningsAsErrors
 
-$demo = Invoke-Simulator @("1", "", "", "", "", "", "", "", "0")
-Assert-Contains $demo "Resposta direta: o primeiro pacote transmitido e o Pacote 1" "demo da Questao 5"
-Assert-Contains $demo "Pilha: pacote 2 registrado para retransmissao." "erro registrado na demo"
+$demo = Invoke-Simulator @("1", "", "", "", "", "", "", "0")
+Assert-Contains $demo "Resposta direta: o primeiro pacote retirado da fila e o Pacote 1" "demo da Questao 5"
+Assert-Contains $demo "Pilha: pacote 1 registrado para retransmissao." "erro registrado na demo"
+Assert-Contains $demo "Pacote 2 entregue e removido da lista ativa." "entrega registrada na demo"
 Assert-Contains $demo "Pilha de erros (topo para base, ordem LIFO)" "pilha final da demo"
 
 $entradaLonga = "origem-com-nome-maior-do-que-o-limite-permitido-na-interface"

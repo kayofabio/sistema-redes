@@ -32,7 +32,9 @@ Durante a demo, pressionar Enter sempre que aparecer `Pressione Enter para conti
 Validações esperadas:
 
 - Pacotes 1, 2, 3 e 4 entram na fila.
-- O Pacote 1 é transmitido primeiro.
+- O Pacote 1 é retirado da fila primeiro.
+- O Pacote 1 simula falha porque possui `500 KB`.
+- O Pacote 2 é transmitido depois, entregue e removido da lista ativa.
 - Dois pacotes são removidos da fila por transmissão.
 - Um pacote entregue é removido da lista.
 - Um pacote com erro aparece na pilha.

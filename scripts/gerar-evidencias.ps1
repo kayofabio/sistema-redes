@@ -156,9 +156,9 @@ Save-Evidence "evidencia-menu-principal" (Select-Block $menu "(?s)===== Micro Ma
 $cadastro = Invoke-Simulator @("3", "2", "1", "PC-02", "192.168.10.11", "02:00:00:00:10:11", "-", "", "0", "0")
 Save-Evidence "evidencia-cadastro-ambiente" (Select-Block $cadastro "(?s)===== Cadastro de ambiente =====.*?\| PC-02\s+\| PC\s+\| 192\.168\.10\.11\s+\| 02:00:00:00:10:11 \| -\s+\|\n\+[-+]+\+" "cadastro de ambiente")
 
-$demo = Invoke-Simulator @("1", "", "", "", "", "", "", "", "0")
+$demo = Invoke-Simulator @("1", "", "", "", "", "", "", "0")
 Save-Transcript "execucao-cenario-questao-5.txt" $demo
-Save-Evidence "evidencia-demo-estado-final" (Select-Block $demo "(?s)5\. Estado final da micro maquina\..*?Resposta direta:.*?FIFO\." "estado final da demo")
+Save-Evidence "evidencia-demo-estado-final" (Select-Block $demo "(?s)4\. Estado final da micro maquina\..*?Resposta direta:.*?FIFO\." "estado final da demo")
 Save-Evidence "evidencia-demo-pausada" (Select-Block $demo "(?s)===== Processamento da rede =====.*?Pressione Enter para continuar\.\.\." "demo pausada")
 
 $animacao = Invoke-Simulator @("2", "1", "10", "500", "", "", "", "2", "", "", "0", "0")

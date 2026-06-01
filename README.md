@@ -41,6 +41,10 @@ Pacotes usados no cenário-base:
 | 3 | 700 KB |
 | 4 | 200 KB |
 
+Na demo guiada, uma regra criada pelo grupo para fins de teste envia pacotes com `500 KB` ou mais para a pilha de erros na primeira transmissão. Assim, o Pacote 1 é o primeiro retirado da fila e simula falha; o Pacote 2 é transmitido depois, entregue e removido da lista ativa.
+
+Nas operações manuais, a falha continua explícita pelo menu. Essa separação permite demonstrar retransmissão sem prender pacotes grandes em um ciclo automático de erro.
+
 ## Como compilar
 
 Linux com GCC ou Windows com MinGW/GCC:
@@ -162,7 +166,7 @@ As imagens abaixo foram geradas a partir de saídas locais do executável, com r
 
 ![Baixo privilégio](docs/assets/evidencia-baixo-privilegio.png)
 
-Os transcripts completos e imagens de execução mais longas também estão em `docs/assets`.
+Os transcripts completos também estão em `docs/assets`.
 
 ## Estrutura do código
 
@@ -187,7 +191,7 @@ Os transcripts completos e imagens de execução mais longas também estão em `
 4. Se o destino for um domínio, o fluxo mostra uma consulta DNS didática.
 5. O próximo salto é resolvido por ARP: destino local ou gateway.
 6. A animação ASCII mostra a PDU passando pela topologia.
-7. Se houver erro, o pacote entra na pilha de retransmissão.
+7. Se houver erro, o pacote entra na pilha de retransmissão. Na demo, a falha segue a regra de teste por tamanho; no modo manual, ela é registrada pelo usuário.
 8. Quando um pacote é entregue, ele pode ser removido da lista encadeada.
 
 O tempo estimado é calculado com uma taxa didática de `100 KB/s`. Assim, um pacote de `500 KB` aparece com `5000 ms` estimados. Esse valor não mede rede real; serve para tornar o campo do enunciado visível na simulação.
@@ -200,7 +204,7 @@ O mesmo raciocínio aparece quando alguém abre um site, usa Wi-Fi, acessa siste
 
 ### Por que a fila representa bem a transmissão de pacotes?
 
-A fila trabalha com FIFO: o primeiro pacote que entra é o primeiro a sair. No cenário-base, o Pacote 1 chega antes dos outros e por isso é transmitido primeiro. Isso representa uma interface de rede simples em que os pacotes aguardam atendimento em ordem de chegada.
+A fila trabalha com FIFO: o primeiro pacote que entra é o primeiro a sair. No cenário-base, o Pacote 1 chega antes dos outros e por isso é retirado da fila primeiro, mesmo quando a regra de teste simula sua falha. Isso representa uma interface de rede simples em que os pacotes aguardam atendimento em ordem de chegada.
 
 ### Por que a pilha pode representar retransmissão?
 

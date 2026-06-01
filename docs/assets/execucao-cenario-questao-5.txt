@@ -12,6 +12,8 @@ Escolha:===== Cenario guiado da Questao 5 =====
 
 Ambiente usado: PC-01 envia pacotes para app.local, resolvido pelo DNS local.
 
+Regra de teste: pacotes com 500 KB ou mais simulam falha na primeira transmissao.
+
 1. Chegada dos quatro pacotes do enunciado.
 Fila: pacote 1 aguardando transmissao (500 KB, 5000 ms estimados).
 Fila: pacote 2 aguardando transmissao (300 KB, 3000 ms estimados).
@@ -84,19 +86,8 @@ Etapa: Destino recebe e processa
                                                    ----<PDU>
 ===== Resultado da transmissao =====
 
-Pacote transmitido.
-
-ID: 1
-Pacote: 1
-Tamanho: 500 KB
-Tempo estimado: 5000 ms
-Origem: PC-01
-Destino: app.local
-Status: em_transito
-
-Ele permanece na lista como pacote ativo.
-
-Pacote 1 entregue e removido da lista ativa.
+Regra de teste do cenario: pacotes com 500 KB ou mais simulam falha.
+Pilha: pacote 1 registrado para retransmissao.
 
 Revise esta etapa do cenario.
 
@@ -176,16 +167,12 @@ Status: em_transito
 
 Ele permanece na lista como pacote ativo.
 
-Revise esta etapa do cenario.
-
-Pressione Enter para continuar...
-4. Simulacao de erro no Pacote 2.
-Pilha: pacote 2 registrado para retransmissao.
+Pacote 2 entregue e removido da lista ativa.
 
 Revise esta etapa do cenario.
 
 Pressione Enter para continuar...
-5. Estado final da micro maquina.
+4. Estado final da micro maquina.
 
 Fila de transmissao (ordem FIFO)
 +------------+------------+------------+--------------+-------------+
@@ -199,19 +186,19 @@ Pilha de erros (topo para base, ordem LIFO)
 +------------+------------+------------+--------------+-------------+
 | ID         | Pacote     | Tamanho KB | Tempo ms     | Status      |
 +------------+------------+------------+--------------+-------------+
-|          2 |          2 |        300 |         3000 | erro        |
+|          1 |          1 |        500 |         5000 | erro        |
 +------------+------------+------------+--------------+-------------+
 
 Lista encadeada de pacotes ativos
 +------------+------------+--------------------+--------------------+-------------+
 | ID         | Pacote     | Origem             | Destino            | Status      |
 +------------+------------+--------------------+--------------------+-------------+
-|          2 |          2 | PC-01              | app.local          | erro        |
+|          1 |          1 | PC-01              | app.local          | erro        |
 |          3 |          3 | PC-01              | app.local          | aguardando  |
 |          4 |          4 | PC-01              | app.local          | aguardando  |
 +------------+------------+--------------------+--------------------+-------------+
 
-Resposta direta: o primeiro pacote transmitido e o Pacote 1, pois a fila segue FIFO.
+Resposta direta: o primeiro pacote retirado da fila e o Pacote 1, pois a fila segue FIFO.
 
 Pressione Enter para continuar...===== Micro Maquina de Pacotes =====
 

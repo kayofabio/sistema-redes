@@ -126,17 +126,18 @@ Itens adicionados:
 - Retransmissão com nova resolução de rota.
 - Remoção do executável antigo `main.exe`.
 - Parecer técnico em `docs/auditoria-pre-pr.md`.
+- Integração dos quatro commits novos da `origin/main`.
+- Preservação de `simulacao-e-respostas.pdf`.
+- Aplicação da regra de teste `>= 500 KB` somente na demo guiada.
 
 ## Etapa 7 - PR
 
-Status: pendente.
+Status: pronto para abertura.
 
-Condição de abertura:
+Condições verificadas:
 
 - Código revisado.
 - Fluxo executado localmente.
 - Documentação coerente com o comportamento real do terminal.
-- Reconciliar a branch com a `origin/main`, que avançou quatro commits.
-- Preservar o PDF novo `simulacao-e-respostas.pdf`.
-- Alinhar com o grupo a regra adicional de erro para pacotes com `500 KB` ou mais.
-- Repetir `.\scripts\validar-projeto.ps1` depois da integração.
+- `.\scripts\validar-projeto.ps1` executado depois da integração.
+- Evidências regeneradas depois da integração.

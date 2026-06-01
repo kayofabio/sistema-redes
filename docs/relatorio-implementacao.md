@@ -10,7 +10,7 @@ O trabalho foi direcionado para transformar o código em uma micro simulação d
 
 1. O pacote não guardava tempo estimado de transmissão.
 2. A origem e o destino eram fixos e não apareciam como parte do pacote principal.
-3. O erro era decidido apenas pelo tamanho maior que 500 KB, regra que não está no enunciado.
+3. O erro era decidido globalmente apenas pelo tamanho do pacote, o que impedia separar teste guiado e operação manual.
 4. A busca e a remoção na lista existiam parcialmente, mas não estavam acessíveis pelo menu.
 5. O pacote entregue continuava na lista, embora a atividade pedisse remoção de pacote entregue.
 6. Não havia README, roteiro de teste ou evidência de execução.
@@ -51,9 +51,9 @@ Isso reduz erro de apresentação, porque o avaliador consegue ver:
 
 - chegada dos quatro pacotes;
 - transmissão dos dois primeiros;
-- pacote entregue removido da lista;
-- pacote com erro enviado à pilha;
-- resposta direta sobre o primeiro pacote transmitido.
+- Pacote 1 retirado primeiro da fila e enviado à pilha pela regra de teste;
+- Pacote 2 transmitido, entregue e removido da lista;
+- resposta direta sobre o primeiro pacote retirado da fila.
 
 Após revisão de apresentação, a demo passou a pausar entre etapas importantes.
 
@@ -268,6 +268,8 @@ A pilha usa vetor fixo com índice `topo`. O último erro registrado é o primei
 A lista encadeada usa alocação dinâmica para manter os pacotes ativos. Ela permite busca por número, atualização de status e remoção de nó entregue.
 
 O ambiente de rede usa uma tabela simples em memória. Essa tabela não substitui DNS, ARP ou roteamento real; ela representa esses conceitos para que o aluno consiga explicar a sequência de decisão.
+
+A regra de falha por tamanho ficou restrita ao cenário guiado. Ela reproduz o teste registrado em `simulacao-e-respostas.pdf` sem alterar as operações manuais: fora da demo, o usuário registra erro explicitamente e pode retransmitir o pacote.
 
 ## Evidências
 

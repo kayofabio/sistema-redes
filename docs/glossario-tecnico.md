@@ -8,7 +8,7 @@ Este glossário reúne os termos usados no código, na documentação e na apres
 | --- | --- |
 | Estrutura de dados | Forma de organizar dados para resolver uma operação. O projeto usa fila, pilha e lista encadeada. |
 | Fila | Estrutura em que o primeiro item a entrar é o primeiro a sair. Representa pacotes aguardando transmissão. |
-| FIFO | Sigla para `First In, First Out`. No projeto, explica por que o Pacote 1 é transmitido antes dos demais. |
+| FIFO | Sigla para `First In, First Out`. No projeto, explica por que o Pacote 1 é retirado da fila antes dos demais, mesmo quando simula falha. |
 | Pilha | Estrutura em que o último item a entrar é o primeiro a sair. Representa pacotes com erro aguardando retransmissão. |
 | LIFO | Sigla para `Last In, First Out`. No projeto, explica por que o erro mais recente fica no topo da pilha. |
 | Lista encadeada | Estrutura formada por nós ligados por ponteiros. Representa pacotes ativos acompanhados pela simulação. |
